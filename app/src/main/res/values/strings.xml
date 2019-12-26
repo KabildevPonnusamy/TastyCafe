@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Tasty Cafe</string>
+    <string name="welcome_msg">Welcome to Coffee shop...</string>
+    <string name="click_here">Click Me</string>
+    <string name="register_text">Register</string>
+    <string name="login">Login</string>
+    <string name="forgot">Forgot password</string>
+    <string name="login_text">Login</string>
+    <string name="welcome_back_text">Welcome back</string>
+    <string name="signin_to_continue">Sing in to continue</string>
+    <string name="forgot_text"> &#160; &#160; &#160;Dont worry. Please enter your email id to change your password</string>
+    <string name="send_text">Send</string>
+    <string name="register_success">Registration Successfully</string>
+    <string name="welcome_reg">Welcome to coffee shop.</string>
+    <string name="login_success">Login successful</string>
+    <string name="welcome_login_msg">Welcome back foodie, Enjoy your snacks!</string>
+    <string name="forgot_welcome">We got you..!</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="create_category">Create Category</string>
+    <string name="items_list">Items List</string>
+    <string name="itemprice">Item price</string>
+    <string name="create_item">Create Item</string>
+    <string name="offerprice">Offer price</string>
+
+    <string name="please_enter">Please enter</string>
+    <string name="please_select_an">Please select an</string>
+    <string name="enter_item_name">Please enter Item name</string>
+    <string name="enter_price_valid_dollor">Please enter valid price</string>
+    <string name="enter_price_dollor">Please enter price dollor</string>
+    <string name="enter_price_cents">Please enter price cents</string>
+    <string name="enter_offer_dollor">Please enter offer dollor</string>
+    <string name="enter_offer_cents">Please enter offer cents</string>
+    <string name="update_item">Update Item</string>
+    <string name="itemstatus">Show Status</string>
+    <string name="upd_item_title">Update Item</string>
+    <string name="update_category">Update Category</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="item_hot_or_cold">Hot or Cold : </string>
+
+</resources>
