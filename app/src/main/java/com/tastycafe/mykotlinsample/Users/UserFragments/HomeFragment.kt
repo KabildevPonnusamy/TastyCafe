@@ -36,6 +36,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
     var itemList: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
     var offeredItemList: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
     var allItemsList: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
+    var hotItems: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
 
     internal lateinit var db: DBHelper
     var selectpos: Int = 0
@@ -62,6 +63,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
         search_layout.setOnClickListener(this)
         offers_seeall.setOnClickListener(this)
         user_logout.setOnClickListener(this)
+        hot_items_layout.setOnClickListener(this)
 
         get_OfferedItems()
             }
@@ -187,6 +189,16 @@ class HomeFragment : Fragment(), View.OnClickListener {
             R.id.user_logout -> userLogout()
             R.id.offers_seeall -> seeAllOffers()
             R.id.search_layout -> getAllItems(v)
+            R.id.hot_items_layout -> getHotItems(v)
+                }
+            }
+
+    private fun getHotItems(v: View) {
+        hotItems.clear()
+        hotItems = db.getHotItems() as ArrayList<ItemDatasList>
+
+        if(hotItems.size > 0) {
+            Snackbar.make(v, "No Items found", Snackbar.LENGTH_SHORT).show()
                 }
             }
 
