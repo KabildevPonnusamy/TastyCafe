@@ -1,5 +1,6 @@
 package com.tastycafe.mykotlinsample.Users.UserActivities
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tastycafe.mykotlinsample.Admin.AdminModels.ItemDatasList
+import com.tastycafe.mykotlinsample.Admin.AdminSupportClasses.RecyclerItemClickListenr
 import com.tastycafe.mykotlinsample.R
 import com.tastycafe.mykotlinsample.Users.UserAdapters.CoolItemsAdapter
 import kotlinx.android.synthetic.main.user_coolitems.*
@@ -26,6 +28,44 @@ class UserCoolItems : AppCompatActivity(), View.OnClickListener {
 
         view_init()
         get_Intents()
+        recycler_listeners()
+
+    }
+
+    private fun recycler_listeners() {
+        coolitems_recycle.addOnItemTouchListener(
+            RecyclerItemClickListenr(applicationContext,
+                coolitems_recycle,
+                object :
+                    RecyclerItemClickListenr.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        var itemid: Int = coolItems[position].item_id
+                        var itemname: String? = coolItems[position].item_name
+                        var itemimage: String? = coolItems[position].item_img
+                        var itemcateid: String? = coolItems[position].cate_id
+                        var itemprice: String? = coolItems[position].item_price
+                        var itemofrprice: String? = coolItems[position].item_ofr_price
+                        var itemlikecount:String? = coolItems[position].item_like_count
+
+                        intent = Intent(applicationContext, UserItemDetails::class.java)
+                        intent.putExtra("itemid", "" + itemid)
+                        intent.putExtra("itemname", itemname)
+                        intent.putExtra("itemimage", itemimage)
+                        intent.putExtra("itemcateid", itemcateid)
+                        intent.putExtra("itemprice", itemprice)
+                        intent.putExtra("itemofrprice", itemofrprice)
+                        intent.putExtra("itemlikecount", itemlikecount)
+
+                        startActivityForResult(intent, 11)
+                        overridePendingTransition(
+                            R.anim.slide_up,
+                            R.anim.no_animation
+                                        )
+                                    }
+                    override fun onItemLongClick(view: View?, position: Int) {
+                                    }
+                                })
+                        )
 
     }
 

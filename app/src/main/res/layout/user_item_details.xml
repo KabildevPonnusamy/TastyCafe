@@ -123,6 +123,65 @@
             android:textStyle="normal"
             android:gravity="center"/>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="25dp"/>
+
+        <RelativeLayout
+            android:id="@+id/addcart_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:padding="4dp"
+            android:layout_gravity="center"
+            android:background="@drawable/btnborder">
+
+            <TextView
+                android:id="@+id/viewname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add to Cart"
+                android:textStyle="bold"
+                android:singleLine="true"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/firefans_regular"
+                android:textColor="@color/white"
+                android:textSize="17sp"/>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/viewname"
+                android:src="@drawable/ic_carticon"
+                android:tint="@color/white"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Similar items"
+            android:textColor="@color/black"
+            android:fontFamily="@font/firefans_regular"
+            android:textSize="14sp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_centerInParent="true"
+            android:textStyle="normal"
+            android:gravity="center"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/similar_recycle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"/>
+
     </LinearLayout>
 
 </RelativeLayout>

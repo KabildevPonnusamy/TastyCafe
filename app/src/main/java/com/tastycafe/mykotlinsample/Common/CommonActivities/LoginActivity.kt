@@ -28,7 +28,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     lateinit var emailView: EditText
     lateinit var passwordView: EditText
-    lateinit var back_arrow: ImageView
+    lateinit var img_back_arrow: ImageView
     lateinit var login_btn: Button
 
     lateinit var sharedPref: SharedPreferences
@@ -49,9 +49,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private fun view_init() {
         emailView = findViewById(R.id.emailView)
         passwordView = findViewById(R.id.passwordView)
-        back_arrow = findViewById(R.id.login_back)
+        img_back_arrow = findViewById<ImageView>(R.id.img_back_arrow)
         login_btn = findViewById(R.id.login_btn)
-        back_arrow.setOnClickListener(this)
+        img_back_arrow.setOnClickListener(this)
         login_btn.setOnClickListener(this)
         this.hideKeyboard(emailView)
             }
@@ -93,7 +93,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when(v?.id) {
-            R.id.back_arrow -> onBackPressed()
+            R.id.img_back_arrow -> onBackPressed()
             R.id.login_btn -> validate_login(v)
                 }
             }
@@ -145,7 +145,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             overridePendingTransition(
                 R.anim.slide_up,
                 R.anim.no_animation
-            );
+            )
 
         } else {
 
@@ -174,4 +174,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         val result = shown(message, view)
         Snackbar.make(view, result, Snackbar.LENGTH_SHORT).show()
                 }
+
+
 }

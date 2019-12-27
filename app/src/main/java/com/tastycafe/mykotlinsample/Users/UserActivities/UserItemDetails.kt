@@ -6,7 +6,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.tastycafe.mykotlinsample.Admin.AdminModels.ItemDatasList
+import com.tastycafe.mykotlinsample.Database.DBHelper
 import com.tastycafe.mykotlinsample.R
+import com.tastycafe.mykotlinsample.Users.UserAdapters.SimilarAdapter
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.user_item_details.*
 
 class UserItemDetails : AppCompatActivity(), View.OnClickListener {
@@ -20,11 +26,16 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
     var str_ftotallikes: String = ""
     var str_flike_status: String = "0"
 
+    var similarItems: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
+    internal lateinit var db: DBHelper
+    lateinit var similaradapter: SimilarAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_item_details)
         supportActionBar?.hide()
 
+        db = DBHelper(applicationContext)
         init_view()
         get_intents()
             }
@@ -53,18 +64,49 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
                     } else {
             food_price.setText("$ " + str_fprice)
                 }
+
+        getSimilarItems()
+            }
+
+    private fun getSimilarItems() {
+        similarItems.clear()
+        similarItems = db.getAllItems(str_fcate_id) as ArrayList<ItemDatasList>
+        db.close()
+
+        if(similarItems != null) {
+            if(similarItems.size > 0) {
+                similar_recycle.layoutManager = LinearLayoutManager(
+                    applicationContext, RecyclerView.HORIZONTAL,
+                    false
+                        )
+
+                similaradapter =
+                    SimilarAdapter(
+                        applicationContext,
+                        similarItems
+                            )
+
+                similar_recycle.adapter = similaradapter
+                        }
+                     }
             }
 
     private fun init_view() {
         food_back.setOnClickListener(this)
         food_like.setOnClickListener(this)
+        addcart_layout.setOnClickListener(this)
             }
 
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.food_back -> onBackPressed()
             R.id.food_like -> update_like(v)
+            R.id.addcart_layout -> addtoCart(v)
                 }
+            }
+
+    private fun addtoCart(v: View) {
+
             }
 
     private fun update_like(v: View) {

@@ -1,5 +1,6 @@
 package com.tastycafe.mykotlinsample.Users.UserActivities
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tastycafe.mykotlinsample.Admin.AdminModels.ItemDatasList
+import com.tastycafe.mykotlinsample.Admin.AdminSupportClasses.RecyclerItemClickListenr
 import com.tastycafe.mykotlinsample.R
 import com.tastycafe.mykotlinsample.Users.UserAdapters.AllItemsAdapter
 import com.tastycafe.mykotlinsample.Users.UserAdapters.AllOfferItemsAdapter
@@ -16,6 +18,7 @@ import kotlinx.android.synthetic.main.user_all_items.*
 import kotlinx.android.synthetic.main.user_all_offers.*
 import kotlinx.android.synthetic.main.user_all_offers.offers_back
 import kotlinx.android.synthetic.main.user_all_offers.search_edit
+import kotlinx.android.synthetic.main.user_coolitems.*
 
 class UserAllItems: AppCompatActivity() , View.OnClickListener{
 
@@ -29,7 +32,43 @@ class UserAllItems: AppCompatActivity() , View.OnClickListener{
 
         view_init()
         get_intent()
+        recycler_listeners()
+            }
 
+    private fun recycler_listeners() {
+        allitems_recycle.addOnItemTouchListener(
+            RecyclerItemClickListenr(applicationContext,
+                allitems_recycle,
+                object :
+                    RecyclerItemClickListenr.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        var itemid: Int = allitemsList[position].item_id
+                        var itemname: String? = allitemsList[position].item_name
+                        var itemimage: String? = allitemsList[position].item_img
+                        var itemcateid: String? = allitemsList[position].cate_id
+                        var itemprice: String? = allitemsList[position].item_price
+                        var itemofrprice: String? = allitemsList[position].item_ofr_price
+                        var itemlikecount:String? = allitemsList[position].item_like_count
+
+                        intent = Intent(applicationContext, UserItemDetails::class.java)
+                        intent.putExtra("itemid", "" + itemid)
+                        intent.putExtra("itemname", itemname)
+                        intent.putExtra("itemimage", itemimage)
+                        intent.putExtra("itemcateid", itemcateid)
+                        intent.putExtra("itemprice", itemprice)
+                        intent.putExtra("itemofrprice", itemofrprice)
+                        intent.putExtra("itemlikecount", itemlikecount)
+
+                        startActivityForResult(intent, 11)
+                        overridePendingTransition(
+                            R.anim.slide_up,
+                            R.anim.no_animation
+                        )
+                    }
+                    override fun onItemLongClick(view: View?, position: Int) {
+                                }
+                        })
+                  )
             }
 
     private fun view_init() {

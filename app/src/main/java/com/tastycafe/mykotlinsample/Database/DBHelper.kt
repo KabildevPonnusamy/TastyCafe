@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.tastycafe.mykotlinsample.Admin.AdminModels.CategoryList
 import com.tastycafe.mykotlinsample.Admin.AdminModels.ItemDatasList
+import com.tastycafe.mykotlinsample.Admin.AdminModels.LikesList
 import com.tastycafe.mykotlinsample.Common.CommonModels.ProfileDatas
 
 class DBHelper(context: Context) : SQLiteOpenHelper (context,
@@ -23,7 +24,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         private val COL_PASS = "password"
         private val COL_NAME = "name"
         private val COL_MOBILE = "mobile"
-//        private val COL_CREATED_DATE = "created_date"
 
         //Category Table
         private val CATEGORY_TABLE = "Category"
@@ -45,6 +45,12 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         private val ITEM_SHOWN_STATUS = "item_shown_status"
         private val ITEM_CREATED_DATE = "item_created_date"
 
+        // Likes Table
+        private val LIKE_TABLE = "Likes"
+        private val LIKE_ITEM_ID = "like_item_id"
+        private val LIKE_CATE_ID = "like_cate_id"
+        private val LIKE_USER_ID = "like_user_id"
+
             }
 
     val CREATE_PROFILE_TABLE = ("CREATE TABLE $PROFILE_TABLE ($COL_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -58,17 +64,58 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
             "$ITEM_PRICE TEXT, $ITEM_OFFER_PRICE TEXT, $ITEM_LIKES_COUNT text, $ITEM_SHOWN_STATUS TEXT, " +
             "$ITEM_CREATED_DATE TEXT) ")
 
+    val CREATE_LIKE_TABLE = ("CREATE TABLE $LIKE_TABLE ($LIKE_ITEM_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "$LIKE_CATE_ID TEXT, $LIKE_USER_ID TEXT) ")
+
     override fun onCreate(db: SQLiteDatabase?) {
         db!!.execSQL(CREATE_PROFILE_TABLE)
         db!!.execSQL(CREATE_CATEGORY_TABLE)
         db!!.execSQL(CREATE_ITEM_TABLE)
+        db!!.execSQL(CREATE_LIKE_TABLE)
                 }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db!!.execSQL("DROP TABLE IF EXISTS $PROFILE_TABLE")
         db!!.execSQL("DROP TABLE IF EXISTS $CATEGORY_TABLE")
         db!!.execSQL("DROP TABLE IF EXISTS $ITEM_TABLE")
+        db!!.execSQL("DROP TABLE IF EXISTS $LIKE_TABLE")
                 }
+
+    // Add Like Users
+    fun addLikes(item_id: String, cate_id: String, user_id: String) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(LIKE_ITEM_ID, item_id)
+        values.put(LIKE_CATE_ID, cate_id)
+        values.put(LIKE_USER_ID, user_id)
+
+        db.insert(LIKE_TABLE, null, values)
+        db.close()
+            }
+
+    fun deleteLikes(item_id: String, user_id: String) {
+        val db = writableDatabase
+        db.delete(LIKE_TABLE, "$LIKE_ITEM_ID=? and $LIKE_USER_ID=?", arrayOf(item_id, user_id))
+        db.close()
+            }
+
+    fun getLike(item_id: String, user_id: String): List<LikesList> {
+        val myLike = ArrayList<LikesList>()
+        val selectQuery = "SELECT * FROM $LIKE_TABLE where $LIKE_ITEM_ID = '$item_id' and " +
+                "$LIKE_USER_ID = '$user_id'"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(selectQuery, null)
+        if(cursor.moveToFirst()) {
+            do {
+                val mydatas = LikesList()
+                mydatas.item_id = cursor.getInt(cursor.getColumnIndex(LIKE_ITEM_ID))
+                mydatas.cate_id = cursor.getString(cursor.getColumnIndex(LIKE_CATE_ID))
+                mydatas.user_id = cursor.getString(cursor.getColumnIndex(LIKE_USER_ID))
+                myLike.add(mydatas)
+                    } while (cursor.moveToNext())
+                }
+        return myLike
+            }
 
     // Get user By Username and Passsword
     fun getMyUser(username: String, password: String): List<ProfileDatas> {
@@ -211,7 +258,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         values.put(COL_PASS, password)
         values.put(COL_NAME, name)
         values.put(COL_MOBILE, mobile)
-//        values.put(COL_CREATED_DATE, profdatas.created_date)
 
         db.insert(PROFILE_TABLE, null,values)
         db.close()
@@ -315,7 +361,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
     /*Get Items List*/
     fun getAllItems(cate_id: String):List<ItemDatasList> {
         val myitems = ArrayList<ItemDatasList>()
-        val selectQuery = "SELECT * FROM $ITEM_TABLE where $ITEM_SHOWN_STATUS = '1' and $ITEM_CATE_ID = $cate_id"
+        val selectQuery = "SELECT * FROM $ITEM_TABLE where $ITEM_SHOWN_STATUS = '1' " +
+                "and $ITEM_CATE_ID = $cate_id"
         val db = this.writableDatabase
         val cursor = db.rawQuery(selectQuery, null)
         if(cursor.moveToFirst()) {

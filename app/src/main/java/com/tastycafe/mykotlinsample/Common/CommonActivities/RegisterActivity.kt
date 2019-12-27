@@ -81,6 +81,10 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         builder.setPositiveButton("Ok"){dialogInterface, which ->
             intent = Intent(this, UserDashboard::class.java)
             startActivityForResult(intent, 102)
+            overridePendingTransition(
+                R.anim.slide_up,
+                R.anim.no_animation
+                        )
             dialogInterface.dismiss()
                     }
 

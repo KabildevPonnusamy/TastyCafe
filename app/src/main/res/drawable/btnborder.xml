@@ -6,8 +6,10 @@
     <corners
         android:radius="5dp"
         />
+
     <solid android:color="@color/btn_color"
         />
+
     <stroke
         android:width="1dip"
         android:color="@color/white" />

@@ -16,7 +16,7 @@
         android:background="@color/bgnd_color">
 
         <ImageView
-            android:id="@+id/login_back"
+            android:id="@+id/img_back_arrow"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/back_arrow"/>

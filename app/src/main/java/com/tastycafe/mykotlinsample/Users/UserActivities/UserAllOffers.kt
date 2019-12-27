@@ -1,5 +1,6 @@
 package com.tastycafe.mykotlinsample.Users.UserActivities
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,15 +10,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tastycafe.mykotlinsample.Admin.AdminModels.ItemDatasList
+import com.tastycafe.mykotlinsample.Admin.AdminSupportClasses.RecyclerItemClickListenr
 import com.tastycafe.mykotlinsample.R
 import com.tastycafe.mykotlinsample.Users.UserAdapters.AllOfferItemsAdapter
+import kotlinx.android.synthetic.main.user_all_items.*
 import kotlinx.android.synthetic.main.user_all_offers.*
+import kotlinx.android.synthetic.main.user_all_offers.offers_back
+import kotlinx.android.synthetic.main.user_all_offers.search_edit
 
 class UserAllOffers: AppCompatActivity() , View.OnClickListener{
 
     var alloffersList: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
     var alloffersListTemp: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
-    lateinit var alloffersAdapter: AllOfferItemsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +30,45 @@ class UserAllOffers: AppCompatActivity() , View.OnClickListener{
 
         view_init()
         get_intent()
+        recycler_listeners()
 
             }
+
+    private fun recycler_listeners() {
+        alloffers_recycle.addOnItemTouchListener(
+            RecyclerItemClickListenr(applicationContext,
+                alloffers_recycle,
+                object :
+                    RecyclerItemClickListenr.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        var itemid: Int = alloffersList[position].item_id
+                        var itemname: String? = alloffersList[position].item_name
+                        var itemimage: String? = alloffersList[position].item_img
+                        var itemcateid: String? = alloffersList[position].cate_id
+                        var itemprice: String? = alloffersList[position].item_price
+                        var itemofrprice: String? = alloffersList[position].item_ofr_price
+                        var itemlikecount:String? = alloffersList[position].item_like_count
+
+                        intent = Intent(applicationContext, UserItemDetails::class.java)
+                        intent.putExtra("itemid", "" + itemid)
+                        intent.putExtra("itemname", itemname)
+                        intent.putExtra("itemimage", itemimage)
+                        intent.putExtra("itemcateid", itemcateid)
+                        intent.putExtra("itemprice", itemprice)
+                        intent.putExtra("itemofrprice", itemofrprice)
+                        intent.putExtra("itemlikecount", itemlikecount)
+
+                        startActivityForResult(intent, 11)
+                        overridePendingTransition(
+                            R.anim.slide_up,
+                            R.anim.no_animation
+                        )
+                    }
+                    override fun onItemLongClick(view: View?, position: Int) {
+                    }
+                })
+        )
+    }
 
     private fun view_init() {
         offers_back.setOnClickListener(this)
