@@ -68,11 +68,12 @@ class Admin_ItemsList : AppCompatActivity() , View.OnClickListener {
                         var itemofrprice: String? = itemList[position].item_ofr_price
                         var itemshownstatus: String? = itemList[position].item_shown_status
                         var itemcreateddate: String? = itemList[position].item_created_date
+                        var itemlikecount:String? = itemList[position].item_like_count
 
                         Log.e("sample", "LongClkItm: " + itemname);
                         delete_item(
                             itemid, itemname, itemimage, itemcateid, itemprice, itemofrprice,
-                            itemshownstatus, itemcreateddate, itemhotorcold
+                            itemshownstatus, itemcreateddate, itemhotorcold, itemlikecount
                                 )
                             }
                         })
@@ -92,7 +93,8 @@ class Admin_ItemsList : AppCompatActivity() , View.OnClickListener {
                 }
 
     private fun delete_item(itemid: Int, itemname: String?, itemimage: String?, itemcateid: String?, itemprice: String?,
-                            itemofrprice: String?, itemshownstatus: String?, itemcreatedate: String?, itemhotorcold: String?) {
+                            itemofrprice: String?, itemshownstatus: String?, itemcreatedate: String?,
+                            itemhotorcold: String?, itemlikecount: String?) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Item $itemname")
         builder.setMessage("Do you want to do operation?")
@@ -117,6 +119,7 @@ class Admin_ItemsList : AppCompatActivity() , View.OnClickListener {
             intent.putExtra("itemofrprice", itemofrprice)
             intent.putExtra("itemshownstatus", itemshownstatus)
             intent.putExtra("itemcreatedate", itemcreatedate)
+            intent.putExtra("itemlikecount", itemlikecount)
 
             startActivityForResult(intent, 5)
             overridePendingTransition(

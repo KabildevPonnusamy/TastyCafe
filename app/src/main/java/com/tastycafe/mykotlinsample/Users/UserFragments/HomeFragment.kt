@@ -18,11 +18,11 @@ import com.tastycafe.mykotlinsample.Admin.AdminModels.ItemDatasList
 import com.tastycafe.mykotlinsample.Admin.AdminSupportClasses.RecyclerItemClickListenr
 import com.tastycafe.mykotlinsample.Database.DBHelper
 import com.tastycafe.mykotlinsample.R
-import com.tastycafe.mykotlinsample.Users.UserActivities.UserAllItems
-import com.tastycafe.mykotlinsample.Users.UserActivities.UserAllOffers
+import com.tastycafe.mykotlinsample.Users.UserActivities.*
 import com.tastycafe.mykotlinsample.Users.UserAdapters.OfferedUserItemsAdapter
 import com.tastycafe.mykotlinsample.Users.UserAdapters.UserCateAdapter
 import com.tastycafe.mykotlinsample.Users.UserAdapters.UserItemsAdapter
+import kotlinx.android.synthetic.main.admin_itemsact.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment(), View.OnClickListener {
@@ -37,6 +37,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
     var offeredItemList: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
     var allItemsList: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
     var hotItems: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
+    var coolItems: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
 
     internal lateinit var db: DBHelper
     var selectpos: Int = 0
@@ -64,9 +65,81 @@ class HomeFragment : Fragment(), View.OnClickListener {
         offers_seeall.setOnClickListener(this)
         user_logout.setOnClickListener(this)
         hot_items_layout.setOnClickListener(this)
+        cool_items_layout.setOnClickListener(this)
 
         get_OfferedItems()
+        recycle_listeners()
             }
+
+    private fun recycle_listeners() {
+        cate_items_recycle.addOnItemTouchListener(
+            RecyclerItemClickListenr(requireContext(),
+                cate_items_recycle,
+                object :
+                    RecyclerItemClickListenr.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        var itemid: Int = itemList[position].item_id
+                        var itemname: String? = itemList[position].item_name
+                        var itemimage: String? = itemList[position].item_img
+                        var itemcateid: String? = itemList[position].cate_id
+                        var itemprice: String? = itemList[position].item_price
+                        var itemofrprice: String? = itemList[position].item_ofr_price
+                        var itemlikecount:String? = itemList[position].item_like_count
+
+                        intent = Intent(requireContext(), UserItemDetails::class.java)
+                        intent.putExtra("itemid", "" + itemid)
+                        intent.putExtra("itemname", itemname)
+                        intent.putExtra("itemimage", itemimage)
+                        intent.putExtra("itemcateid", itemcateid)
+                        intent.putExtra("itemprice", itemprice)
+                        intent.putExtra("itemofrprice", itemofrprice)
+                        intent.putExtra("itemlikecount", itemlikecount)
+
+                        startActivityForResult(intent, 10)
+                        activity?.overridePendingTransition(
+                            R.anim.slide_up,
+                            R.anim.no_animation
+                                    )
+                                }
+                    override fun onItemLongClick(view: View?, position: Int) {
+                              }
+                        })
+                    )
+
+        offers_recycle.addOnItemTouchListener(
+            RecyclerItemClickListenr(requireContext(),
+                offers_recycle,
+                object :
+                    RecyclerItemClickListenr.OnItemClickListener {
+                    override fun onItemClick(view: View, position: Int) {
+                        var itemid: Int = offeredItemList[position].item_id
+                        var itemname: String? = offeredItemList[position].item_name
+                        var itemimage: String? = offeredItemList[position].item_img
+                        var itemcateid: String? = offeredItemList[position].cate_id
+                        var itemprice: String? = offeredItemList[position].item_price
+                        var itemofrprice: String? = offeredItemList[position].item_ofr_price
+                        var itemlikecount:String? = offeredItemList[position].item_like_count
+
+                        intent = Intent(requireContext(), UserItemDetails::class.java)
+                        intent.putExtra("itemid", "" + itemid)
+                        intent.putExtra("itemname", itemname)
+                        intent.putExtra("itemimage", itemimage)
+                        intent.putExtra("itemcateid", itemcateid)
+                        intent.putExtra("itemprice", itemprice)
+                        intent.putExtra("itemofrprice", itemofrprice)
+                        intent.putExtra("itemlikecount", itemlikecount)
+
+                        startActivityForResult(intent, 11)
+                        activity?.overridePendingTransition(
+                            R.anim.slide_up,
+                            R.anim.no_animation
+                                    )
+                                }
+                    override fun onItemLongClick(view: View?, position: Int) {
+                            }
+                        })
+                     )
+                }
 
     private fun get_OfferedItems() {
         offeredItemList.clear()
@@ -190,6 +263,24 @@ class HomeFragment : Fragment(), View.OnClickListener {
             R.id.offers_seeall -> seeAllOffers()
             R.id.search_layout -> getAllItems(v)
             R.id.hot_items_layout -> getHotItems(v)
+            R.id.cool_items_layout -> getCoolItems(v)
+                }
+            }
+
+    private fun getCoolItems(v: View) {
+        coolItems.clear()
+        coolItems = db.getCoolItems() as ArrayList<ItemDatasList>
+
+        if(coolItems.size > 0) {
+            intent = Intent(requireContext(), UserCoolItems::class.java)
+            intent.putParcelableArrayListExtra("CoolItems", coolItems)
+            startActivityForResult(intent, 9)
+            activity?.overridePendingTransition(
+                R.anim.slide_up,
+                R.anim.no_animation
+                    )
+                } else {
+            Snackbar.make(v, "No Items found", Snackbar.LENGTH_SHORT).show()
                 }
             }
 
@@ -198,6 +289,14 @@ class HomeFragment : Fragment(), View.OnClickListener {
         hotItems = db.getHotItems() as ArrayList<ItemDatasList>
 
         if(hotItems.size > 0) {
+            intent = Intent(requireContext(), UserHotItems::class.java)
+            intent.putParcelableArrayListExtra("HotItems", hotItems)
+            startActivityForResult(intent, 8)
+            activity?.overridePendingTransition(
+                R.anim.slide_up,
+                R.anim.no_animation
+                    )
+                } else {
             Snackbar.make(v, "No Items found", Snackbar.LENGTH_SHORT).show()
                 }
             }
@@ -213,7 +312,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
             activity?.overridePendingTransition(
                 R.anim.slide_up,
                 R.anim.no_animation
-                            )
+                        )
                     } else {
             Snackbar.make(v, "No Items found", Snackbar.LENGTH_SHORT).show()
                 }

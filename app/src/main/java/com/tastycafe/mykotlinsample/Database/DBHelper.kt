@@ -41,6 +41,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         private val ITEM_HOT_or_COLD = "item_hot_or_cold"
         private val ITEM_PRICE = "item_price"
         private val ITEM_OFFER_PRICE = "item_offer_price"
+        private val ITEM_LIKES_COUNT = "item_likes_count"
         private val ITEM_SHOWN_STATUS = "item_shown_status"
         private val ITEM_CREATED_DATE = "item_created_date"
 
@@ -54,7 +55,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
 
     val CREATE_ITEM_TABLE = ("CREATE TABLE $ITEM_TABLE($ITEM_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "$ITEM_CATE_ID TEXT, $ITEM_NAME TEXT, $ITEM_IMAGE TEXT, $ITEM_HOT_or_COLD TEXT, " +
-            "$ITEM_PRICE TEXT, $ITEM_OFFER_PRICE TEXT, $ITEM_SHOWN_STATUS TEXT, " +
+            "$ITEM_PRICE TEXT, $ITEM_OFFER_PRICE TEXT, $ITEM_LIKES_COUNT text, $ITEM_SHOWN_STATUS TEXT, " +
             "$ITEM_CREATED_DATE TEXT) ")
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -281,6 +282,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         values.put(ITEM_HOT_or_COLD, hot_or_cold)
         values.put(ITEM_PRICE, item_price)
         values.put(ITEM_OFFER_PRICE, item_ofr_price)
+        values.put(ITEM_LIKES_COUNT, "0")
         values.put(ITEM_SHOWN_STATUS, item_status)
         values.put(ITEM_CREATED_DATE, item_created_date)
         db.insert(ITEM_TABLE, null, values)
@@ -289,7 +291,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
 
     /*Update Items */
     fun updateItems(item_id: String, item_name: String, item_image: String, item_price: String,
-                    item_ofr_price: String, item_status: String, hot_or_cold: String): Int {
+                    item_ofr_price: String, item_status: String, hot_or_cold: String,
+                    like_count: String): Int {
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(ITEM_NAME, item_name)
@@ -297,6 +300,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         values.put(ITEM_HOT_or_COLD, hot_or_cold)
         values.put(ITEM_PRICE, item_price)
         values.put(ITEM_OFFER_PRICE, item_ofr_price)
+        values.put(ITEM_LIKES_COUNT, like_count)
         values.put(ITEM_SHOWN_STATUS, item_status)
         return db.update(ITEM_TABLE, values, "$ITEM_ID=?", arrayOf(item_id))
                 }
@@ -325,6 +329,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
                 mydatas.item_hot_or_cold = cursor.getString(cursor.getColumnIndex(ITEM_HOT_or_COLD))
                 mydatas.item_price = cursor.getString(cursor.getColumnIndex(ITEM_PRICE))
                 mydatas.item_ofr_price = cursor.getString(cursor.getColumnIndex(ITEM_OFFER_PRICE))
+                mydatas.item_like_count = cursor.getString(cursor.getColumnIndex(ITEM_LIKES_COUNT))
                 mydatas.item_shown_status = cursor.getString(cursor.getColumnIndex(
                     ITEM_SHOWN_STATUS
                 ))
@@ -340,7 +345,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
     /* Get Hot Items */
     fun getHotItems():List<ItemDatasList> {
         val myitems = ArrayList<ItemDatasList>()
-        val selectQuery = "SELECT * FROM $ITEM_TABLE where $ITEM_SHOWN_STATUS = '1' and $ITEM_HOT_or_COLD = '1' "
+        val selectQuery = "SELECT * FROM $ITEM_TABLE where $ITEM_SHOWN_STATUS = '1' and " +
+                "$ITEM_HOT_or_COLD = '1' "
         val db = this.writableDatabase
         val cursor = db.rawQuery(selectQuery, null)
         if(cursor.moveToFirst()) {
@@ -354,6 +360,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
                 mydatas.item_hot_or_cold = cursor.getString(cursor.getColumnIndex(ITEM_HOT_or_COLD))
                 mydatas.item_price = cursor.getString(cursor.getColumnIndex(ITEM_PRICE))
                 mydatas.item_ofr_price = cursor.getString(cursor.getColumnIndex(ITEM_OFFER_PRICE))
+                mydatas.item_like_count = cursor.getString(cursor.getColumnIndex(ITEM_LIKES_COUNT))
                 mydatas.item_shown_status = cursor.getString(cursor.getColumnIndex(
                     ITEM_SHOWN_STATUS
                 ))
@@ -383,6 +390,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
                 mydatas.item_hot_or_cold = cursor.getString(cursor.getColumnIndex(ITEM_HOT_or_COLD))
                 mydatas.item_price = cursor.getString(cursor.getColumnIndex(ITEM_PRICE))
                 mydatas.item_ofr_price = cursor.getString(cursor.getColumnIndex(ITEM_OFFER_PRICE))
+                mydatas.item_like_count = cursor.getString(cursor.getColumnIndex(ITEM_LIKES_COUNT))
                 mydatas.item_shown_status = cursor.getString(cursor.getColumnIndex(
                     ITEM_SHOWN_STATUS
                 ))
@@ -412,6 +420,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
                 mydatas.item_hot_or_cold = cursor.getString(cursor.getColumnIndex(ITEM_HOT_or_COLD))
                 mydatas.item_price = cursor.getString(cursor.getColumnIndex(ITEM_PRICE))
                 mydatas.item_ofr_price = cursor.getString(cursor.getColumnIndex(ITEM_OFFER_PRICE))
+                mydatas.item_like_count = cursor.getString(cursor.getColumnIndex(ITEM_LIKES_COUNT))
                 mydatas.item_shown_status = cursor.getString(cursor.getColumnIndex(
                     ITEM_SHOWN_STATUS
                 ))
@@ -442,6 +451,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
                 mydatas.item_hot_or_cold = cursor.getString(cursor.getColumnIndex(ITEM_HOT_or_COLD))
                 mydatas.item_price = cursor.getString(cursor.getColumnIndex(ITEM_PRICE))
                 mydatas.item_ofr_price = cursor.getString(cursor.getColumnIndex(ITEM_OFFER_PRICE))
+                mydatas.item_like_count = cursor.getString(cursor.getColumnIndex(ITEM_LIKES_COUNT))
                 mydatas.item_shown_status = cursor.getString(cursor.getColumnIndex(
                     ITEM_SHOWN_STATUS
                 ))
@@ -471,6 +481,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
                 mydatas.item_hot_or_cold = cursor.getString(cursor.getColumnIndex(ITEM_HOT_or_COLD))
                 mydatas.item_price = cursor.getString(cursor.getColumnIndex(ITEM_PRICE))
                 mydatas.item_ofr_price = cursor.getString(cursor.getColumnIndex(ITEM_OFFER_PRICE))
+                mydatas.item_like_count = cursor.getString(cursor.getColumnIndex(ITEM_LIKES_COUNT))
                 mydatas.item_shown_status = cursor.getString(cursor.getColumnIndex(
                     ITEM_SHOWN_STATUS
                 ))

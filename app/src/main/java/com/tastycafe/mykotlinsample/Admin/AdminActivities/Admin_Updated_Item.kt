@@ -33,6 +33,7 @@ class Admin_Updated_Item : AppCompatActivity(), View.OnClickListener {
     var itemofrprice: String = ""
     var itemshownstatus: String = ""
     var itemcreatedate: String = ""
+    var itemlikecount:String = ""
 
     var iDollorPrice = ""
     var iCentPrice = ""
@@ -146,6 +147,7 @@ class Admin_Updated_Item : AppCompatActivity(), View.OnClickListener {
         itemshownstatus = intent.getStringExtra("itemshownstatus")
         itemcreatedate = intent.getStringExtra("itemcreatedate")
         itemhotorcold = intent.getStringExtra("itemhotorcold")
+        itemlikecount = intent.getStringExtra("itemlikecount")
             }
 
     override fun onClick(v: View?) {
@@ -273,7 +275,8 @@ class Admin_Updated_Item : AppCompatActivity(), View.OnClickListener {
                 }
 
         db.updateItems("" + itemid, itemname, itemimage, iDollorPrice + "." + iCentPrice,
-            iOfrDollorPrice + "." + iOfrCentPrice, itemshownstatus, itemhotorcold)
+            iOfrDollorPrice + "." + iOfrCentPrice, itemshownstatus, itemhotorcold,
+            itemlikecount)
         db.close()
 
         setResult(6)

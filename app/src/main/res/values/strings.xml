@@ -7,7 +7,7 @@
     <string name="forgot">Forgot password</string>
     <string name="login_text">Login</string>
     <string name="welcome_back_text">Welcome back</string>
-    <string name="signin_to_continue">Sing in to continue</string>
+    <string name="signin_to_continue">Sign in to continue</string>
     <string name="forgot_text"> &#160; &#160; &#160;Dont worry. Please enter your email id to change your password</string>
     <string name="send_text">Send</string>
     <string name="register_success">Registration Successfully</string>
@@ -38,6 +38,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="item_hot_or_cold">Hot or Cold : </string>
+    <string name="item_hot_or_cold">Hot or Cool : </string>
 
 </resources>

@@ -265,7 +265,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ToggleButton"
-                android:textOff="Cold"
+                android:textOff="Cool"
                 android:textOn="Hot"
                 android:layout_marginLeft="10dp"
                 android:textAllCaps="false"/>

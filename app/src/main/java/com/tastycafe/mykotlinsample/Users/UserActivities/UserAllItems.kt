@@ -21,7 +21,6 @@ class UserAllItems: AppCompatActivity() , View.OnClickListener{
 
     var allitemsList: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
     var allitemsListTemp: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
-    lateinit var alloffersAdapter: AllOfferItemsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +72,7 @@ class UserAllItems: AppCompatActivity() , View.OnClickListener{
                         item.item_ofr_price = allitemsListTemp.get(i).item_ofr_price
                         item.item_shown_status = allitemsListTemp.get(i).item_shown_status
                         item.item_created_date = allitemsListTemp.get(i).item_created_date
+                        item.item_like_count = allitemsListTemp.get(i).item_like_count
                         allitemsList.add(item)
                                 }
                             }

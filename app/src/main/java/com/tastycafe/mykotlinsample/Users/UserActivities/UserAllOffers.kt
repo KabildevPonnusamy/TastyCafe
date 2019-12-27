@@ -67,6 +67,7 @@ class UserAllOffers: AppCompatActivity() , View.OnClickListener{
                         item.item_img = alloffersListTemp.get(i).item_img
                         item.item_price = alloffersListTemp.get(i).item_price
                         item.item_ofr_price = alloffersListTemp.get(i).item_ofr_price
+                        item.item_like_count = alloffersListTemp.get(i).item_like_count
                         item.item_shown_status = alloffersListTemp.get(i).item_shown_status
                         item.item_created_date = alloffersListTemp.get(i).item_created_date
                         alloffersList.add(item)

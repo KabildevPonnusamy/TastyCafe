@@ -34,7 +34,7 @@ class Admin_Add_Items : AppCompatActivity(), View.OnClickListener, Admin_Interfa
     var str_Pcent: String? = null
     var str_Odollor:String? = null
     var str_Ocent: String? = null
-    var str_hot_cold:String = "1"
+    var str_hot_cold:String = "0"
 
     lateinit var additem_back: ImageView
     lateinit var added_image: ImageView

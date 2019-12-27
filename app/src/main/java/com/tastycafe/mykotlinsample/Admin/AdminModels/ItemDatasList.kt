@@ -12,6 +12,7 @@ class ItemDatasList() : Parcelable {
     var item_hot_or_cold: String? = null
     var item_price: String? = null
     var item_ofr_price: String? = null
+    var item_like_count: String? = null
     var item_shown_status: String? = null
     var item_created_date: String? = null
 
@@ -23,6 +24,7 @@ class ItemDatasList() : Parcelable {
         item_hot_or_cold = parcel.readString()
         item_price = parcel.readString()
         item_ofr_price = parcel.readString()
+        item_like_count = parcel.readString()
         item_shown_status = parcel.readString()
         item_created_date = parcel.readString()
                 }
@@ -35,6 +37,7 @@ class ItemDatasList() : Parcelable {
         item_hot_or_cold = parcel.readString()
         item_price = parcel.readString()
         item_ofr_price = parcel.readString()
+        item_like_count = parcel.readString()
         item_shown_status = parcel.readString()
         item_created_date = parcel.readString()
             }
@@ -47,6 +50,7 @@ class ItemDatasList() : Parcelable {
         parcel.writeString(item_hot_or_cold)
         parcel.writeString(item_price)
         parcel.writeString(item_ofr_price)
+        parcel.writeString(item_like_count)
         parcel.writeString(item_shown_status)
         parcel.writeString(item_created_date)
                 }

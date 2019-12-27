@@ -51,6 +51,18 @@
             android:name="com.tastycafe.mykotlinsample.Users.UserActivities.UserAllItems"
             android:theme="@style/Theme.AppCompat"/>
 
+        <activity
+            android:name="com.tastycafe.mykotlinsample.Users.UserActivities.UserHotItems"
+            android:theme="@style/Theme.AppCompat"/>
+
+        <activity
+            android:name="com.tastycafe.mykotlinsample.Users.UserActivities.UserCoolItems"
+            android:theme="@style/Theme.AppCompat"/>
+
+        <activity
+            android:name="com.tastycafe.mykotlinsample.Users.UserActivities.UserItemDetails"
+            android:theme="@style/Theme.AppCompat"/>
+
         <!-- Admin Activities -->
 
         <activity
