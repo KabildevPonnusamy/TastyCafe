@@ -47,6 +47,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
 
         // Likes Table
         private val LIKE_TABLE = "Likes"
+        private val LIKE_ID = "like_id"
         private val LIKE_ITEM_ID = "like_item_id"
         private val LIKE_CATE_ID = "like_cate_id"
         private val LIKE_USER_ID = "like_user_id"
@@ -64,8 +65,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
             "$ITEM_PRICE TEXT, $ITEM_OFFER_PRICE TEXT, $ITEM_LIKES_COUNT text, $ITEM_SHOWN_STATUS TEXT, " +
             "$ITEM_CREATED_DATE TEXT) ")
 
-    val CREATE_LIKE_TABLE = ("CREATE TABLE $LIKE_TABLE ($LIKE_ITEM_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "$LIKE_CATE_ID TEXT, $LIKE_USER_ID TEXT) ")
+    val CREATE_LIKE_TABLE = ("CREATE TABLE $LIKE_TABLE ($LIKE_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "$LIKE_ITEM_ID TEXT, $LIKE_CATE_ID TEXT, $LIKE_USER_ID TEXT) ")
 
     override fun onCreate(db: SQLiteDatabase?) {
         db!!.execSQL(CREATE_PROFILE_TABLE)
@@ -82,27 +83,27 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
                 }
 
     // Add Like Users
-    fun addLikes(item_id: String, cate_id: String, user_id: String) {
+    fun addLikes(item_id: String, cate_id: String, user_email: String) {
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(LIKE_ITEM_ID, item_id)
         values.put(LIKE_CATE_ID, cate_id)
-        values.put(LIKE_USER_ID, user_id)
+        values.put(LIKE_USER_ID, user_email)
 
         db.insert(LIKE_TABLE, null, values)
         db.close()
             }
 
-    fun deleteLikes(item_id: String, user_id: String) {
+    fun deleteLikes(item_id: String, user_email: String) {
         val db = writableDatabase
-        db.delete(LIKE_TABLE, "$LIKE_ITEM_ID=? and $LIKE_USER_ID=?", arrayOf(item_id, user_id))
+        db.delete(LIKE_TABLE, "$LIKE_ITEM_ID=? and $LIKE_USER_ID=?", arrayOf(item_id, user_email))
         db.close()
             }
 
-    fun getLike(item_id: String, user_id: String): List<LikesList> {
+    fun getLike(item_id: String, user_email: String): ArrayList<LikesList> {
         val myLike = ArrayList<LikesList>()
         val selectQuery = "SELECT * FROM $LIKE_TABLE where $LIKE_ITEM_ID = '$item_id' and " +
-                "$LIKE_USER_ID = '$user_id'"
+                "$LIKE_USER_ID = '$user_email'"
         val db = this.writableDatabase
         val cursor = db.rawQuery(selectQuery, null)
         if(cursor.moveToFirst()) {
@@ -116,6 +117,25 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
                 }
         return myLike
             }
+
+    fun totalLike(item_id: String): ArrayList<LikesList> {
+        val myLike = ArrayList<LikesList>()
+        val selectQuery = "SELECT * FROM $LIKE_TABLE where $LIKE_ITEM_ID = '$item_id' "
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(selectQuery, null)
+        if(cursor.moveToFirst()) {
+            do {
+                val mydatas = LikesList()
+                mydatas.item_id = cursor.getInt(cursor.getColumnIndex(LIKE_ITEM_ID))
+                mydatas.cate_id = cursor.getString(cursor.getColumnIndex(LIKE_CATE_ID))
+                mydatas.user_id = cursor.getString(cursor.getColumnIndex(LIKE_USER_ID))
+                myLike.add(mydatas)
+            } while (cursor.moveToNext())
+        }
+        return myLike
+    }
+
+
 
     // Get user By Username and Passsword
     fun getMyUser(username: String, password: String): List<ProfileDatas> {

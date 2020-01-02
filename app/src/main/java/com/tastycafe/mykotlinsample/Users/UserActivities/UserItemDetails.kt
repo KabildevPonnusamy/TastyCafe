@@ -1,6 +1,8 @@
 package com.tastycafe.mykotlinsample.Users.UserActivities
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -11,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tastycafe.mykotlinsample.Admin.AdminModels.ItemDatasList
+import com.tastycafe.mykotlinsample.Admin.AdminModels.LikesList
 import com.tastycafe.mykotlinsample.Admin.AdminSupportClasses.RecyclerItemClickListenr
 import com.tastycafe.mykotlinsample.Database.DBHelper
 import com.tastycafe.mykotlinsample.R
@@ -30,18 +33,31 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
     var str_ftotallikes: String = ""
     var str_flike_status: String = "0"
 
+    var user_email: String? = null
+
     var similarItems: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
+    var myLikesList: ArrayList<LikesList> = ArrayList<LikesList>()
+    var totalLikesList: ArrayList<LikesList> = ArrayList<LikesList>()
+
     internal lateinit var db: DBHelper
     lateinit var similaradapter: SimilarAdapter
+    private val sharedPrefFile = "coffee_preference"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_item_details)
         supportActionBar?.hide()
 
+        shared_Preference()
         db = DBHelper(applicationContext)
         init_view()
         get_intents()
+    }
+
+    private fun shared_Preference() {
+        var sharedPref: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        var editor: SharedPreferences.Editor = sharedPref.edit()
+        user_email = sharedPref.getString("user_email", "")
     }
 
     private fun get_intents() {
@@ -51,22 +67,19 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
         str_fcate_id = intent.getStringExtra("itemcateid")
         str_fprice = intent.getStringExtra("itemprice")
         str_offprice = intent.getStringExtra("itemofrprice")
-        str_ftotallikes = intent.getStringExtra("itemlikecount")
+//        str_ftotallikes = intent.getStringExtra("itemlikecount")
 
         show_views()
         recycler_listeners()
     }
 
     private fun show_views() {
-        if (str_ftotallikes == null || str_ftotallikes.equals("")) {
-            str_ftotallikes = "0"
-        }
 
+        getTotalLikes()
         val bitmap: Bitmap = BitmapFactory.decodeFile(str_fimage)
         food_image.setImageBitmap(bitmap)
 
         food_name.setText(str_fname)
-        food_like_count.setText(str_ftotallikes)
 
         if (!str_offprice.equals("00.00")) {
             food_price.setText("$ " + str_offprice)
@@ -75,6 +88,27 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
         }
 
         getSimilarItems()
+        getLikedorNot()
+    }
+
+    private fun getLikedorNot() {
+        myLikesList.clear()
+        myLikesList = db.getLike(str_fid, "" + user_email )
+        db.close()
+
+        if(myLikesList.size > 0) {
+            str_flike_status = "1"
+            food_like.setColorFilter(
+                ContextCompat.getColor(applicationContext, R.color.red),
+                android.graphics.PorterDuff.Mode.SRC_IN
+                    );
+                } else {
+            str_flike_status = "0"
+            food_like.setColorFilter(
+                ContextCompat.getColor(applicationContext, R.color.bgnd_color),
+                android.graphics.PorterDuff.Mode.SRC_IN
+                    );
+                }
     }
 
     private fun recycler_listeners() {
@@ -91,7 +125,7 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
                         str_fcate_id = similarItems[position].cate_id.toString()
                         str_fprice = similarItems[position].item_price.toString()
                         str_offprice = similarItems[position].item_ofr_price.toString()
-                        str_ftotallikes = similarItems[position].item_like_count.toString()
+//                        str_ftotallikes = similarItems[position].item_like_count.toString()
 
                         show_views()
                             }
@@ -162,13 +196,45 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
                 ContextCompat.getColor(applicationContext, R.color.red),
                 android.graphics.PorterDuff.Mode.SRC_IN
             );
+            addLike()
+
         } else {
             str_flike_status = "0"
             food_like.setColorFilter(
                 ContextCompat.getColor(applicationContext, R.color.bgnd_color),
                 android.graphics.PorterDuff.Mode.SRC_IN
             );
+            deleteLike()
         }
+    }
+
+    private fun deleteLike() {
+        db.deleteLikes(str_fid,"" + user_email)
+        db.close()
+        getTotalLikes()
+    }
+
+    private fun addLike() {
+        Log.e("sampleApp", "F_Id: " + str_fid)
+        Log.e("sampleApp", "Cate_Id: " + str_fcate_id)
+        Log.e("sampleApp", "User_Id: " + user_email)
+        db.addLikes(str_fid, str_fcate_id, "" + user_email)
+        db.close()
+        getTotalLikes()
+    }
+
+    private fun getTotalLikes() {
+        totalLikesList.clear()
+        totalLikesList = db.totalLike(str_fid)
+        db.close()
+
+        if(totalLikesList.size > 0) {
+            Log.e("sampleApp", "Size: " + totalLikesList.size)
+            str_ftotallikes = "" + totalLikesList.size
+                } else {
+            str_ftotallikes = "0"
+            }
+        food_like_count.setText(str_ftotallikes)
     }
 
     override fun onBackPressed() {
