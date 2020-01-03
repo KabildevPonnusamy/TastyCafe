@@ -52,7 +52,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         private val LIKE_CATE_ID = "like_cate_id"
         private val LIKE_USER_ID = "like_user_id"
 
-            }
+    }
 
     val CREATE_PROFILE_TABLE = ("CREATE TABLE $PROFILE_TABLE ($COL_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "$COL_EMAIL TEXT, $COL_PASS TEXT, $COL_NAME TEXT, $COL_MOBILE TEXT)")
@@ -73,14 +73,14 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         db!!.execSQL(CREATE_CATEGORY_TABLE)
         db!!.execSQL(CREATE_ITEM_TABLE)
         db!!.execSQL(CREATE_LIKE_TABLE)
-                }
+    }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db!!.execSQL("DROP TABLE IF EXISTS $PROFILE_TABLE")
         db!!.execSQL("DROP TABLE IF EXISTS $CATEGORY_TABLE")
         db!!.execSQL("DROP TABLE IF EXISTS $ITEM_TABLE")
         db!!.execSQL("DROP TABLE IF EXISTS $LIKE_TABLE")
-                }
+    }
 
     // Add Like Users
     fun addLikes(item_id: String, cate_id: String, user_email: String) {
@@ -92,13 +92,13 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
 
         db.insert(LIKE_TABLE, null, values)
         db.close()
-            }
+    }
 
     fun deleteLikes(item_id: String, user_email: String) {
         val db = writableDatabase
         db.delete(LIKE_TABLE, "$LIKE_ITEM_ID=? and $LIKE_USER_ID=?", arrayOf(item_id, user_email))
         db.close()
-            }
+    }
 
     fun getLike(item_id: String, user_email: String): ArrayList<LikesList> {
         val myLike = ArrayList<LikesList>()
@@ -109,14 +109,33 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         if(cursor.moveToFirst()) {
             do {
                 val mydatas = LikesList()
-                mydatas.item_id = cursor.getInt(cursor.getColumnIndex(LIKE_ITEM_ID))
+                mydatas.id = cursor.getInt(cursor.getColumnIndex(LIKE_ID))
+                mydatas.like_id = cursor.getString(cursor.getColumnIndex(LIKE_ITEM_ID))
                 mydatas.cate_id = cursor.getString(cursor.getColumnIndex(LIKE_CATE_ID))
                 mydatas.user_id = cursor.getString(cursor.getColumnIndex(LIKE_USER_ID))
                 myLike.add(mydatas)
-                    } while (cursor.moveToNext())
-                }
+            } while (cursor.moveToNext())
+        }
         return myLike
-            }
+    }
+
+    fun getMyLikes(user_email: String): ArrayList<LikesList> {
+        val myLike = ArrayList<LikesList>()
+        val selectQuery = "SELECT * FROM $LIKE_TABLE where $LIKE_USER_ID = '$user_email'"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(selectQuery, null)
+        if(cursor.moveToFirst()) {
+            do {
+                val mydatas = LikesList()
+                mydatas.id = cursor.getInt(cursor.getColumnIndex(LIKE_ID))
+                mydatas.like_id = cursor.getString(cursor.getColumnIndex(LIKE_ITEM_ID))
+                mydatas.cate_id = cursor.getString(cursor.getColumnIndex(LIKE_CATE_ID))
+                mydatas.user_id = cursor.getString(cursor.getColumnIndex(LIKE_USER_ID))
+                myLike.add(mydatas)
+            } while (cursor.moveToNext())
+        }
+        return myLike
+    }
 
     fun totalLike(item_id: String): ArrayList<LikesList> {
         val myLike = ArrayList<LikesList>()
@@ -126,7 +145,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         if(cursor.moveToFirst()) {
             do {
                 val mydatas = LikesList()
-                mydatas.item_id = cursor.getInt(cursor.getColumnIndex(LIKE_ITEM_ID))
+                mydatas.id = cursor.getInt(cursor.getColumnIndex(LIKE_ID))
+                mydatas.like_id = cursor.getString(cursor.getColumnIndex(LIKE_ITEM_ID))
                 mydatas.cate_id = cursor.getString(cursor.getColumnIndex(LIKE_CATE_ID))
                 mydatas.user_id = cursor.getString(cursor.getColumnIndex(LIKE_USER_ID))
                 myLike.add(mydatas)
@@ -134,8 +154,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         }
         return myLike
     }
-
-
 
     // Get user By Username and Passsword
     fun getMyUser(username: String, password: String): List<ProfileDatas> {
@@ -156,11 +174,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
 //                mydatas.created_date = cursor.getString(cursor.getColumnIndex(COL_CREATED_DATE))
 
                 myprof.add(mydatas)
-             } while (cursor.moveToNext())
-          }
+            } while (cursor.moveToNext())
+        }
 
         return myprof
-          }
+    }
 
     //Search user by Email
     fun searchBEmail(username: String): List<ProfileDatas> {
@@ -180,10 +198,10 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
 //                mydatas.created_date = cursor.getString(cursor.getColumnIndex(COL_CREATED_DATE))
 
                 myprof.add(mydatas)
-                } while (cursor.moveToNext())
-            }
-        return myprof
+            } while (cursor.moveToNext())
         }
+        return myprof
+    }
 
     //Get All Category
     fun getCategories():List<CategoryList> {
@@ -201,10 +219,10 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
                 mydatas.cate_show_status = cursor.getString(cursor.getColumnIndex(CATE_SHOW_STATUS))
                 mydatas.cate_created = cursor.getString(cursor.getColumnIndex(CATE_CREATED_DATE))
                 mycates.add(mydatas)
-                 } while (cursor.moveToNext())
-              }
+            } while (cursor.moveToNext())
+        }
         return mycates
-            }
+    }
 
     //Get All Category
     fun getHiddenCategories():List<CategoryList> {
@@ -228,7 +246,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
     }
 
     //Get particular category details
-    fun getthisCategories(cate_id: String):List<CategoryList> {
+    fun getthisCategories(cate_id: String):ArrayList<CategoryList> {
         val mycates = ArrayList<CategoryList>()
         val selectQuery = "SELECT * FROM $CATEGORY_TABLE where $CATE_SHOW_STATUS = '1' and $CATE_ID = $cate_id"
         val db = this.writableDatabase
@@ -265,10 +283,10 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
                 mydatas.mobile = cursor.getString(cursor.getColumnIndex(COL_MOBILE))
 //                mydatas.created_date = cursor.getString(cursor.getColumnIndex(COL_CREATED_DATE))
                 myprof.add(mydatas)
-                    } while (cursor.moveToNext())
-                }
-           return myprof
-            }
+            } while (cursor.moveToNext())
+        }
+        return myprof
+    }
 
     // Add Users
     fun addUser(email: String, password: String, name: String, mobile: String) {
@@ -281,7 +299,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
 
         db.insert(PROFILE_TABLE, null,values)
         db.close()
-            }
+    }
 
     // Update Password
     fun updateUser(email: String, password: String):Int {
@@ -290,19 +308,19 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         values.put(COL_PASS, password)
 
         return db.update(PROFILE_TABLE, values, "$COL_EMAIL=?", arrayOf(email))
-            }
+    }
 
     // Delete User
     fun deleteUser(profdatas : ProfileDatas) {
         val db = this.writableDatabase
         db.delete(PROFILE_TABLE, "$COL_EMAIL=?", arrayOf(profdatas.email.toString()))
         db.close()
-            }
+    }
 
-         /* Category Tables */
+    /* Category Tables */
     //Add Category
     fun addCategory(catename: String, cateimg: String, cateshown: String, catecreated: String) {
-       val db = this.writableDatabase
+        val db = this.writableDatabase
         val values = ContentValues()
         values.put(CATE_NAME, catename)
         values.put(CATE_IMAGE, cateimg)
@@ -310,14 +328,14 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         values.put(CATE_CREATED_DATE, catecreated)
         db.insert(CATEGORY_TABLE, null, values)
         db.close()
-            }
+    }
 
     //Delete Category
     fun deleteCategory (cate_id: String) {
         val db = this.writableDatabase
         db.delete (CATEGORY_TABLE, "$CATE_ID=?", arrayOf(cate_id))
         db.close()
-            }
+    }
 
     //Update Category
     fun updateCategory (cate_name: String, cate_img: String, cate_status:String, cate_id: String):Int {
@@ -327,14 +345,14 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         values.put(CATE_IMAGE, cate_img)
         values.put(CATE_SHOW_STATUS, cate_status)
         return db.update(CATEGORY_TABLE, values, "$CATE_ID=?", arrayOf(cate_id))
-            }
+    }
 
     fun updateShownCategories(item_id: String, item_status: String): Int {
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(CATE_SHOW_STATUS, item_status)
         return db.update(CATEGORY_TABLE, values, "$CATE_ID=?", arrayOf(item_id))
-                }
+    }
 
     /******************************  Items  ********************************************/
     /*Add Items*/
@@ -353,7 +371,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         values.put(ITEM_CREATED_DATE, item_created_date)
         db.insert(ITEM_TABLE, null, values)
         db.close()
-            }
+    }
 
     /*Update Items */
     fun updateItems(item_id: String, item_name: String, item_image: String, item_price: String,
@@ -369,20 +387,51 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         values.put(ITEM_LIKES_COUNT, like_count)
         values.put(ITEM_SHOWN_STATUS, item_status)
         return db.update(ITEM_TABLE, values, "$ITEM_ID=?", arrayOf(item_id))
-                }
+    }
 
     /*Delete Items */
     fun deleteItems(item_id: String) {
         val db = this.writableDatabase
         db.delete(ITEM_TABLE, "$ITEM_ID=?", arrayOf(item_id))
         db.close()
-            }
+    }
 
     /*Get Items List*/
     fun getAllItems(cate_id: String):List<ItemDatasList> {
         val myitems = ArrayList<ItemDatasList>()
         val selectQuery = "SELECT * FROM $ITEM_TABLE where $ITEM_SHOWN_STATUS = '1' " +
                 "and $ITEM_CATE_ID = $cate_id"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(selectQuery, null)
+        if(cursor.moveToFirst()) {
+            do {
+                val mydatas =
+                    ItemDatasList()
+                mydatas.item_id = cursor.getInt(cursor.getColumnIndex(ITEM_ID))
+                mydatas.cate_id = cursor.getString(cursor.getColumnIndex(ITEM_CATE_ID))
+                mydatas.item_name = cursor.getString(cursor.getColumnIndex(ITEM_NAME))
+                mydatas.item_img = cursor.getString(cursor.getColumnIndex(ITEM_IMAGE))
+                mydatas.item_hot_or_cold = cursor.getString(cursor.getColumnIndex(ITEM_HOT_or_COLD))
+                mydatas.item_price = cursor.getString(cursor.getColumnIndex(ITEM_PRICE))
+                mydatas.item_ofr_price = cursor.getString(cursor.getColumnIndex(ITEM_OFFER_PRICE))
+                mydatas.item_like_count = cursor.getString(cursor.getColumnIndex(ITEM_LIKES_COUNT))
+                mydatas.item_shown_status = cursor.getString(cursor.getColumnIndex(
+                    ITEM_SHOWN_STATUS
+                ))
+                mydatas.item_created_date = cursor.getString(cursor.getColumnIndex(
+                    ITEM_CREATED_DATE
+                ))
+                myitems.add(mydatas)
+            } while (cursor.moveToNext())
+        }
+        return myitems
+    }
+
+    /* Get Particular item */
+    fun getSingleItem(item_id: String):ArrayList<ItemDatasList> {
+        val myitems = ArrayList<ItemDatasList>()
+        val selectQuery = "SELECT * FROM $ITEM_TABLE where $ITEM_SHOWN_STATUS = '1' " +
+                "and $ITEM_ID = $item_id"
         val db = this.writableDatabase
         val cursor = db.rawQuery(selectQuery, null)
         if(cursor.moveToFirst()) {
@@ -557,16 +606,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
                 ))
                 offeredItems.add(mydatas)
             } while (cursor.moveToNext())
-                }
+        }
         return offeredItems
-            }
+    }
 
     fun updateShownItems(item_id: String, item_status: String): Int {
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(ITEM_SHOWN_STATUS, item_status)
         return db.update(ITEM_TABLE, values, "$ITEM_ID=?", arrayOf(item_id))
-                    }
+    }
 
 
 

@@ -32,6 +32,7 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
     var str_offprice: String = ""
     var str_ftotallikes: String = ""
     var str_flike_status: String = "0"
+    var shownstatus: String? = null
 
     var user_email: String? = null
 
@@ -67,7 +68,13 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
         str_fcate_id = intent.getStringExtra("itemcateid")
         str_fprice = intent.getStringExtra("itemprice")
         str_offprice = intent.getStringExtra("itemofrprice")
-//        str_ftotallikes = intent.getStringExtra("itemlikecount")
+        shownstatus = intent.getStringExtra("shownstatus")
+
+        if(shownstatus != null && shownstatus != "") {
+            food_like.visibility = View.GONE
+             } else {
+            food_like.visibility = View.VISIBLE
+          }
 
         show_views()
         recycler_listeners()
@@ -239,6 +246,7 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        setResult(12)
         finish()
         overridePendingTransition(R.anim.no_animation, R.anim.slide_down);
     }
