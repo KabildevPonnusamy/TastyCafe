@@ -8,6 +8,7 @@ import com.tastycafe.mykotlinsample.Admin.AdminModels.CategoryList
 import com.tastycafe.mykotlinsample.Admin.AdminModels.ItemDatasList
 import com.tastycafe.mykotlinsample.Admin.AdminModels.LikesList
 import com.tastycafe.mykotlinsample.Common.CommonModels.ProfileDatas
+import com.tastycafe.mykotlinsample.Users.UserModels.AddCartList
 
 class DBHelper(context: Context) : SQLiteOpenHelper (context,
     DATABASE_NAME, null,
@@ -52,6 +53,17 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         private val LIKE_CATE_ID = "like_cate_id"
         private val LIKE_USER_ID = "like_user_id"
 
+        // Cart Table
+        private val CART_TABLE = "Carts"
+        private val CART_ID = "cart_id"
+        private val CART_CATE_ID = "cart_cate_id"
+        private val CART_ITEM_ID = "cart_item_id"
+        private val CART_ITEM_NAME = "cart_item_name"
+        private val CART_ITEM_PRICE = "cart_item_price"
+        private val CART_ITEM_IMAGE = "cart_item_img"
+        private val CART_ITEM_COUNT = "cart_item_count"
+        private val CART_USER_ID = "cart_user_id"
+
     }
 
     val CREATE_PROFILE_TABLE = ("CREATE TABLE $PROFILE_TABLE ($COL_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -68,11 +80,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
     val CREATE_LIKE_TABLE = ("CREATE TABLE $LIKE_TABLE ($LIKE_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "$LIKE_ITEM_ID TEXT, $LIKE_CATE_ID TEXT, $LIKE_USER_ID TEXT) ")
 
+    val CREATE_CART_TABLE = ("CREATE TABLE $CART_TABLE ($CART_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "$CART_CATE_ID TEXT, $CART_ITEM_ID TEXT, $CART_ITEM_NAME TEXT, $CART_ITEM_PRICE TEXT, " +
+            "$CART_ITEM_IMAGE TEXT, $CART_ITEM_COUNT TEXT, $CART_USER_ID TEXT) ")
+
     override fun onCreate(db: SQLiteDatabase?) {
         db!!.execSQL(CREATE_PROFILE_TABLE)
         db!!.execSQL(CREATE_CATEGORY_TABLE)
         db!!.execSQL(CREATE_ITEM_TABLE)
         db!!.execSQL(CREATE_LIKE_TABLE)
+        db!!.execSQL(CREATE_CART_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -80,6 +97,78 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         db!!.execSQL("DROP TABLE IF EXISTS $CATEGORY_TABLE")
         db!!.execSQL("DROP TABLE IF EXISTS $ITEM_TABLE")
         db!!.execSQL("DROP TABLE IF EXISTS $LIKE_TABLE")
+        db!!.execSQL("DROP TABLE IF EXISTS $CART_TABLE")
+    }
+
+    // Add cart Table
+    fun addTocart(cart_cate_id: String, cart_item_id: String, cart_item_name: String,
+                 cart_item_price: String, cart_item_img: String, cart_item_count: String,
+                 cart_user_id: String) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(CART_CATE_ID, cart_cate_id)
+        values.put(CART_ITEM_ID, cart_item_id)
+        values.put(CART_ITEM_NAME, cart_item_name)
+        values.put(CART_ITEM_PRICE, cart_item_price)
+        values.put(CART_ITEM_IMAGE, cart_item_img)
+        values.put(CART_ITEM_COUNT, cart_item_count)
+        values.put(CART_USER_ID, cart_user_id)
+        db.insert(CART_TABLE, null, values)
+        db.close()
+    }
+
+    // Get Cart Datas
+    fun getCartDatas(cart_user_id: String): ArrayList<AddCartList> {
+        val cartList = ArrayList<AddCartList>()
+        val selectQuery = "SELECT * FROM $CART_TABLE where $CART_USER_ID = '$cart_user_id' "
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(selectQuery, null)
+        if(cursor.moveToFirst()) {
+            do {
+                val cartDatas = AddCartList()
+                cartDatas.cart_id = cursor.getInt(cursor.getColumnIndex(CART_ID))
+                cartDatas.cart_cate_id = cursor.getString(cursor.getColumnIndex(CART_CATE_ID))
+                cartDatas.cart_item_id = cursor.getString(cursor.getColumnIndex(CART_ITEM_ID))
+                cartDatas.cart_item_name = cursor.getString(cursor.getColumnIndex(CART_ITEM_NAME))
+                cartDatas.cart_item_price = cursor.getString(cursor.getColumnIndex(CART_ITEM_PRICE))
+                cartDatas.cart_item_count = cursor.getString(cursor.getColumnIndex(CART_ITEM_COUNT))
+                cartDatas.cart_item_image = cursor.getString(cursor.getColumnIndex(CART_ITEM_IMAGE))
+                cartDatas.cart_user_id = cursor.getString(cursor.getColumnIndex(CART_USER_ID))
+                cartList.add(cartDatas)
+                } while (cursor.moveToNext())
+            }
+        return cartList
+    }
+
+    //Get Particular Item on Cart
+    fun getItemFromCart(cart_user_id: String, cart_item_id: String): ArrayList<AddCartList> {
+        val cartList = ArrayList<AddCartList>()
+        val selectQuery = "SELECT * FROM $CART_TABLE where $CART_USER_ID = '$cart_user_id' and " +
+                "$CART_ITEM_ID = '$cart_item_id'"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(selectQuery, null)
+        if(cursor.moveToFirst()) {
+            do {
+                val cartDatas = AddCartList()
+                cartDatas.cart_id = cursor.getInt(cursor.getColumnIndex(CART_ID))
+                cartDatas.cart_cate_id = cursor.getString(cursor.getColumnIndex(CART_CATE_ID))
+                cartDatas.cart_item_id = cursor.getString(cursor.getColumnIndex(CART_ITEM_ID))
+                cartDatas.cart_item_name = cursor.getString(cursor.getColumnIndex(CART_ITEM_NAME))
+                cartDatas.cart_item_price = cursor.getString(cursor.getColumnIndex(CART_ITEM_PRICE))
+                cartDatas.cart_item_count = cursor.getString(cursor.getColumnIndex(CART_ITEM_COUNT))
+                cartDatas.cart_item_image = cursor.getString(cursor.getColumnIndex(CART_ITEM_IMAGE))
+                cartDatas.cart_user_id = cursor.getString(cursor.getColumnIndex(CART_USER_ID))
+                cartList.add(cartDatas)
+            } while (cursor.moveToNext())
+        }
+        return cartList
+    }
+
+    //Delete Cart Items
+    fun deleteCartItems (cart_user_id: String, cart_id: String) {
+        val db = writableDatabase
+        db.delete(CART_TABLE, "$CART_ID=? and $CART_USER_ID=?", arrayOf(cart_id, cart_user_id))
+        db.close()
     }
 
     // Add Like Users
