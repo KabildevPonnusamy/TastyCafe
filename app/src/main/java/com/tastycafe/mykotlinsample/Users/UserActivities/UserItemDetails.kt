@@ -18,6 +18,7 @@ import com.tastycafe.mykotlinsample.Admin.AdminSupportClasses.RecyclerItemClickL
 import com.tastycafe.mykotlinsample.Database.DBHelper
 import com.tastycafe.mykotlinsample.R
 import com.tastycafe.mykotlinsample.Users.UserAdapters.SimilarAdapter
+import com.tastycafe.mykotlinsample.Users.UserModels.AddCartList
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.user_all_offers.*
 import kotlinx.android.synthetic.main.user_item_details.*
@@ -33,12 +34,14 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
     var str_ftotallikes: String = ""
     var str_flike_status: String = "0"
     var shownstatus: String? = null
+    var enabledisable:String? = null
 
     var user_email: String? = null
 
     var similarItems: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
     var myLikesList: ArrayList<LikesList> = ArrayList<LikesList>()
     var totalLikesList: ArrayList<LikesList> = ArrayList<LikesList>()
+    var mycartList: ArrayList<AddCartList> = ArrayList<AddCartList>()
 
     internal lateinit var db: DBHelper
     lateinit var similaradapter: SimilarAdapter
@@ -76,8 +79,25 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
             food_like.visibility = View.VISIBLE
           }
 
+        check_cart_shown()
+
         show_views()
         recycler_listeners()
+    }
+
+    private fun check_cart_shown() {
+        mycartList.clear()
+        mycartList = db.getItemFromCart("" + user_email, str_fid)
+        db.close()
+
+        if(mycartList.size > 0) {
+//            addcart_layout.visibility = View.GONE
+            viewname.isClickable=false
+            viewname.setText("Added")
+        } else {
+//            addcart_layout.visibility = View.VISIBLE
+            viewname.isClickable=true
+        }
     }
 
     private fun show_views() {
@@ -193,7 +213,11 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun addtoCart(v: View) {
+        db.addTocart(str_fcate_id, str_fid, str_fname, str_fprice, str_fimage, "1",
+            "" + user_email);
+        db.close()
 
+        check_cart_shown()
     }
 
     private fun update_like(v: View) {

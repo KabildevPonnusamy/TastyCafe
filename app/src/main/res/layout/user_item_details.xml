@@ -185,6 +185,7 @@
                 android:textSize="17sp"/>
 
             <ImageView
+                android:id="@+id/cart_img"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="10dp"
