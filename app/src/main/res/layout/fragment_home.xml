@@ -53,6 +53,16 @@
                     android:textSize="22sp"/>
 
                 <ImageView
+                    android:id="@+id/user_cart"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/user_logout"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_cartimg"
+                    android:padding="5dp"/>
+
+                <ImageView
                     android:id="@+id/user_logout"
                     android:layout_width="34dp"
                     android:layout_height="34dp"

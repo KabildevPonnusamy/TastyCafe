@@ -79,8 +79,6 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
             food_like.visibility = View.VISIBLE
           }
 
-        check_cart_shown()
-
         show_views()
         recycler_listeners()
     }
@@ -91,11 +89,10 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
         db.close()
 
         if(mycartList.size > 0) {
-//            addcart_layout.visibility = View.GONE
             viewname.isClickable=false
             viewname.setText("Added")
         } else {
-//            addcart_layout.visibility = View.VISIBLE
+            viewname.setText("Add to Cart")
             viewname.isClickable=true
         }
     }
@@ -116,6 +113,7 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
 
         getSimilarItems()
         getLikedorNot()
+        check_cart_shown()
     }
 
     private fun getLikedorNot() {
@@ -166,8 +164,6 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
         similarItems.clear()
         similarItems = db.getAllItems(str_fcate_id) as ArrayList<ItemDatasList>
         db.close()
-
-        Log.e("sampleApp", "ID_value: " + str_fid)
 
         var id: Int = str_fid.toInt()
         for (item in similarItems.indices) {
@@ -246,9 +242,6 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun addLike() {
-        Log.e("sampleApp", "F_Id: " + str_fid)
-        Log.e("sampleApp", "Cate_Id: " + str_fcate_id)
-        Log.e("sampleApp", "User_Id: " + user_email)
         db.addLikes(str_fid, str_fcate_id, "" + user_email)
         db.close()
         getTotalLikes()
@@ -260,7 +253,6 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
         db.close()
 
         if(totalLikesList.size > 0) {
-            Log.e("sampleApp", "Size: " + totalLikesList.size)
             str_ftotallikes = "" + totalLikesList.size
                 } else {
             str_ftotallikes = "0"
