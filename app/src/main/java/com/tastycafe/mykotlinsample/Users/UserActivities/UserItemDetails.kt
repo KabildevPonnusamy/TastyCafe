@@ -18,6 +18,7 @@ import com.tastycafe.mykotlinsample.Admin.AdminSupportClasses.RecyclerItemClickL
 import com.tastycafe.mykotlinsample.Database.DBHelper
 import com.tastycafe.mykotlinsample.R
 import com.tastycafe.mykotlinsample.Users.UserAdapters.SimilarAdapter
+import com.tastycafe.mykotlinsample.Users.UserModels.AddCartList
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.user_all_offers.*
 import kotlinx.android.synthetic.main.user_item_details.*
@@ -32,12 +33,15 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
     var str_offprice: String = ""
     var str_ftotallikes: String = ""
     var str_flike_status: String = "0"
+    var shownstatus: String? = null
+    var enabledisable:String? = null
 
     var user_email: String? = null
 
     var similarItems: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
     var myLikesList: ArrayList<LikesList> = ArrayList<LikesList>()
     var totalLikesList: ArrayList<LikesList> = ArrayList<LikesList>()
+    var mycartList: ArrayList<AddCartList> = ArrayList<AddCartList>()
 
     internal lateinit var db: DBHelper
     lateinit var similaradapter: SimilarAdapter
@@ -67,10 +71,30 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
         str_fcate_id = intent.getStringExtra("itemcateid")
         str_fprice = intent.getStringExtra("itemprice")
         str_offprice = intent.getStringExtra("itemofrprice")
-//        str_ftotallikes = intent.getStringExtra("itemlikecount")
+        shownstatus = intent.getStringExtra("shownstatus")
+
+        if(shownstatus != null && shownstatus != "") {
+            food_like.visibility = View.GONE
+             } else {
+            food_like.visibility = View.VISIBLE
+          }
 
         show_views()
         recycler_listeners()
+    }
+
+    private fun check_cart_shown() {
+        mycartList.clear()
+        mycartList = db.getItemFromCart("" + user_email, str_fid)
+        db.close()
+
+        if(mycartList.size > 0) {
+            viewname.isClickable=false
+            viewname.setText("Added")
+        } else {
+            viewname.setText("Add to Cart")
+            viewname.isClickable=true
+        }
     }
 
     private fun show_views() {
@@ -89,6 +113,7 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
 
         getSimilarItems()
         getLikedorNot()
+        check_cart_shown()
     }
 
     private fun getLikedorNot() {
@@ -140,8 +165,6 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
         similarItems = db.getAllItems(str_fcate_id) as ArrayList<ItemDatasList>
         db.close()
 
-        Log.e("sampleApp", "ID_value: " + str_fid)
-
         var id: Int = str_fid.toInt()
         for (item in similarItems.indices) {
             if (id == similarItems.get(item).item_id) {
@@ -186,7 +209,11 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun addtoCart(v: View) {
+        db.addTocart(str_fcate_id, str_fid, str_fname, str_fprice, str_fimage, "1",
+            "" + user_email);
+        db.close()
 
+        check_cart_shown()
     }
 
     private fun update_like(v: View) {
@@ -215,9 +242,6 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun addLike() {
-        Log.e("sampleApp", "F_Id: " + str_fid)
-        Log.e("sampleApp", "Cate_Id: " + str_fcate_id)
-        Log.e("sampleApp", "User_Id: " + user_email)
         db.addLikes(str_fid, str_fcate_id, "" + user_email)
         db.close()
         getTotalLikes()
@@ -229,7 +253,6 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
         db.close()
 
         if(totalLikesList.size > 0) {
-            Log.e("sampleApp", "Size: " + totalLikesList.size)
             str_ftotallikes = "" + totalLikesList.size
                 } else {
             str_ftotallikes = "0"
@@ -239,6 +262,7 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        setResult(12)
         finish()
         overridePendingTransition(R.anim.no_animation, R.anim.slide_down);
     }

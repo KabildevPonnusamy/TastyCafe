@@ -22,8 +22,11 @@ import com.tastycafe.mykotlinsample.Users.UserActivities.*
 import com.tastycafe.mykotlinsample.Users.UserAdapters.OfferedUserItemsAdapter
 import com.tastycafe.mykotlinsample.Users.UserAdapters.UserCateAdapter
 import com.tastycafe.mykotlinsample.Users.UserAdapters.UserItemsAdapter
+import com.tastycafe.mykotlinsample.Users.UserModels.AddCartList
+import kotlinx.android.synthetic.main.admin_fragcategory.*
 import kotlinx.android.synthetic.main.admin_itemsact.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.user_item_details.*
 
 class HomeFragment : Fragment(), View.OnClickListener {
 
@@ -32,6 +35,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
     lateinit var editor: SharedPreferences.Editor
 
     var strName: String = ""
+    var str_user_id: String = ""
     var categorylist: ArrayList<CategoryList> = ArrayList<CategoryList>()
     var itemList: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
     var offeredItemList: ArrayList<ItemDatasList> = ArrayList<ItemDatasList>()
@@ -46,7 +50,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
     lateinit var offersadapter: OfferedUserItemsAdapter
     var cid: Int = 0
     lateinit var intent: Intent
-
+    var mycartList: ArrayList<AddCartList> = ArrayList<AddCartList>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -66,10 +70,26 @@ class HomeFragment : Fragment(), View.OnClickListener {
         user_logout.setOnClickListener(this)
         hot_items_layout.setOnClickListener(this)
         cool_items_layout.setOnClickListener(this)
+        user_cart.setOnClickListener(this)
 
         get_OfferedItems()
         recycle_listeners()
+        check_cartShown()
             }
+
+    private fun check_cartShown() {
+        mycartList.clear()
+        mycartList = db.getCartDatas("" + str_user_id)
+        db.close()
+
+        Log.e("sampleApp", "SizeValue: " + mycartList.size)
+
+        if(mycartList.size > 0) {
+            user_cart.visibility = View.VISIBLE
+        } else {
+            user_cart.visibility = View.GONE
+        }
+    }
 
     private fun recycle_listeners() {
         cate_items_recycle.addOnItemTouchListener(
@@ -255,6 +275,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
         sharedPref = activity!!.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         editor = sharedPref.edit()
         strName = sharedPref.getString("user_name", "").toString()
+        str_user_id = sharedPref.getString("user_email", "").toString()
             }
 
     override fun onClick(v: View?) {
@@ -264,8 +285,25 @@ class HomeFragment : Fragment(), View.OnClickListener {
             R.id.search_layout -> getAllItems(v)
             R.id.hot_items_layout -> getHotItems(v)
             R.id.cool_items_layout -> getCoolItems(v)
+            R.id.user_cart -> getCart(v)
                 }
             }
+
+    private fun getCart(v: View) {
+        mycartList.clear()
+        mycartList = db.getCartDatas("" + str_user_id)
+        db.close()
+
+        send_cartPage()
+    }
+
+    private fun send_cartPage() {
+        if(mycartList.size > 0) {
+
+        } else {
+
+        }
+    }
 
     private fun getCoolItems(v: View) {
         coolItems.clear()
@@ -333,4 +371,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
         editor!!.commit()
         activity?.finish()
             }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.e("sampleApp", "ActivityResult")
+        check_cartShown()
+    }
 }

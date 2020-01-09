@@ -5,26 +5,30 @@ import android.os.Parcelable
 
 class LikesList(): Parcelable {
 
-    var item_id: Int = 0
+    var id: Int = 0
+    var like_id: String? = null
     var cate_id: String? = null
     var user_id: String? = null
 
 
     constructor(parcel: Parcel) : this() {
-        item_id = parcel.readInt()
+        id = parcel.readInt()
+        like_id = parcel.readString()
         cate_id = parcel.readString()
         user_id = parcel.readString()
-            }
+    }
 
     private fun readFromParcel(parcel: Parcel){
-        item_id = parcel.readInt()
+        id = parcel.readInt()
+        like_id = parcel.readString()
         cate_id = parcel.readString()
         user_id= parcel.readString()
 
-                }
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(item_id)
+        parcel.writeInt(id)
+        parcel.writeString(like_id)
         parcel.writeString(cate_id)
         parcel.writeString(user_id)
     }
