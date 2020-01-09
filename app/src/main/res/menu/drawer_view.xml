@@ -10,9 +10,9 @@
         />
 
     <item
-        android:id="@+id/action_ongoing"
-        android:title="Current Orders"
-        android:icon="@drawable/icon_going_orders"
+        android:id="@+id/action_likes"
+        android:title="Most Likes"
+        android:icon="@drawable/icon_mostlikes"
         />
 
     <item

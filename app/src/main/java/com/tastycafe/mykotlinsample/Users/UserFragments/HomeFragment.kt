@@ -299,7 +299,13 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
     private fun send_cartPage() {
         if(mycartList.size > 0) {
-
+            intent = Intent(activity, UserMyCart::class.java)
+            intent.putParcelableArrayListExtra("myCartList", mycartList)
+            startActivityForResult(intent, 51)
+            activity?.overridePendingTransition(
+                R.anim.slide_up,
+                R.anim.no_animation
+            )
         } else {
 
         }

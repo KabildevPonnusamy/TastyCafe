@@ -30,8 +30,6 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var mobView: EditText
     lateinit var register_btn: Button
     lateinit var back_arrow: ImageView
-    lateinit var login_view: TextView
-    lateinit var forgot_view: TextView
 
     lateinit var sharedPref: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
@@ -56,14 +54,9 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         mobView   = findViewById(R.id.mobile)
         register_btn = findViewById(R.id.register_btn)
         back_arrow = findViewById(R.id.back_arrow)
-
-        login_view = findViewById(R.id.login_view)
-        forgot_view = findViewById(R.id.forgot_view)
         this.hideKeyboard(usernameView)
 
         back_arrow.setOnClickListener(this)
-        login_view.setOnClickListener(this)
-        forgot_view.setOnClickListener(this)
         register_btn.setOnClickListener(this)
                 }
 
@@ -79,12 +72,13 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         builder.setMessage(R.string.welcome_reg)
 
         builder.setPositiveButton("Ok"){dialogInterface, which ->
-            intent = Intent(this, UserDashboard::class.java)
+            onBackPressed()
+            /*intent = Intent(this, UserDashboard::class.java)
             startActivityForResult(intent, 102)
             overridePendingTransition(
                 R.anim.slide_up,
                 R.anim.no_animation
-                        )
+                        )*/
             dialogInterface.dismiss()
                     }
 
@@ -111,8 +105,6 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.back_arrow -> onBackPressed()
-            R.id.login_view -> move_login_activity()
-            R.id.forgot_view -> move_forgot_activity()
             R.id.register_btn -> send_registration(v)
                 }
             }
@@ -205,21 +197,4 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         Snackbar.make(view, result, Snackbar.LENGTH_SHORT).show()
                 }
 
-    private fun move_forgot_activity() {
-        intent = Intent(applicationContext, ForgotActivity::class.java)
-        startActivity(intent)
-        overridePendingTransition(
-            R.anim.slide_up,
-            R.anim.no_animation
-                        );
-                }
-
-    private fun move_login_activity() {
-        intent = Intent(applicationContext, LoginActivity::class.java)
-        startActivity(intent)
-        overridePendingTransition(
-            R.anim.slide_up,
-            R.anim.no_animation
-                        );
-                }
 }

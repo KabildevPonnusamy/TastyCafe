@@ -25,42 +25,34 @@ class SplashActivity : AppCompatActivity() {
         var editor: SharedPreferences.Editor = sharedPref.edit()
 
         var email_str = sharedPref.getString("user_email", "")
-        if(!email_str.equals("")) {
-
-            if(email_str.equals("admin@admin.com") ) {
-                Handler().postDelayed({
+        Handler().postDelayed({
+            if(!email_str.equals("")) {
+                if(email_str.equals("admin@admin.com") ) {
+                    editor.putString("login_status", "1")
+                    editor.apply()
+                    editor.commit()
                     intent = Intent(applicationContext, Admin_Dashboard::class.java)
-                    startActivity(intent)
+                    startActivityForResult(intent, 101)
 
                     overridePendingTransition(
                         R.anim.slide_up,
                         R.anim.no_animation
                     );
-
-                }, 1000)
-                    } else {
-                Handler().postDelayed({
+                } else {
+                    editor.putString("login_status", "1")
+                    editor.apply()
+                    editor.commit()
                     intent = Intent(applicationContext, UserDashboard::class.java)
-                    startActivityForResult(intent, 103)
-
-                    overridePendingTransition(
-                        R.anim.slide_up,
-                        R.anim.no_animation
-                    );
-
-                }, 1000)
+                    startActivityForResult(intent, 102)
+                    overridePendingTransition( R.anim.slide_up, R.anim.no_animation );
                 }
-
-            Toast.makeText(applicationContext, "Already Logged in", Toast.LENGTH_SHORT).show()
-
-
-
+            } else {
+                intent = Intent(applicationContext, LoginActivity::class.java)
+                startActivityForResult(intent, 103)
+                overridePendingTransition( R.anim.slide_up, R.anim.no_animation );
             }
 
-        /*Handler().postDelayed({
-            intent = Intent(applicationContext, LoginActivity::class.java)
-            finish()
-        }, SPLASH_TIME_OUT)*/
+        }, 1000)
 
         val button_click = findViewById<Button>(R.id.button_click);
         button_click.setOnClickListener() {
@@ -71,5 +63,10 @@ class SplashActivity : AppCompatActivity() {
                 R.anim.no_animation
                     );
                 }
+            }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        finish()
             }
         }

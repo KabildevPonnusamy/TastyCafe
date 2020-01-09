@@ -1,6 +1,7 @@
 package com.tastycafe.mykotlinsample.Admin.AdminActivities
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -16,12 +17,14 @@ import com.tastycafe.mykotlinsample.Admin.AdminFragments.CategoryFragment
 import com.tastycafe.mykotlinsample.Admin.AdminFragments.SecondFragment
 import com.tastycafe.mykotlinsample.R
 import com.google.android.material.navigation.NavigationView
+import com.tastycafe.mykotlinsample.Common.CommonActivities.LoginActivity
 import kotlinx.android.synthetic.main.admin_dashboard.*
 import kotlinx.android.synthetic.main.admin_appbarmain.*
 
 class Admin_Dashboard : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val sharedPrefFile = "coffee_preference"
+    lateinit var sharedPref: SharedPreferences
     var editor: SharedPreferences.Editor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +32,7 @@ class Admin_Dashboard : AppCompatActivity(), NavigationView.OnNavigationItemSele
         setContentView(R.layout.admin_dashboard)
         supportActionBar ?.hide()
 
-        var sharedPref: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        sharedPref= this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         editor = sharedPref.edit()
 
         val toggle = ActionBarDrawerToggle(this,  drawer_layout, toolbar,
@@ -54,7 +57,7 @@ class Admin_Dashboard : AppCompatActivity(), NavigationView.OnNavigationItemSele
                 CategoryFragment()
                     }
 
-            R.id.action_ongoing -> {
+            R.id.action_likes -> {
                 SecondFragment()
                     }
 
@@ -62,9 +65,17 @@ class Admin_Dashboard : AppCompatActivity(), NavigationView.OnNavigationItemSele
                 SecondFragment()
                     }
             R.id.action_logout -> {
+                var login_status = sharedPref.getString("login_status", "")
                 editor!!.clear()
                 editor!!.commit()
-                finish()
+
+                if(login_status.equals("1")) {
+                    intent = Intent(applicationContext, LoginActivity::class.java)
+                    startActivityForResult(intent, 101)
+                    finish()
+                } else {
+                    finish()
+                }
                 return
                     }
 
@@ -90,7 +101,9 @@ class Admin_Dashboard : AppCompatActivity(), NavigationView.OnNavigationItemSele
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
                    } else {
-            super.onBackPressed()
+            setResult(52)
+            finish()
+//            super.onBackPressed()
                 }
             }
 

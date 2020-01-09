@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.tastycafe.mykotlinsample.Admin.AdminActivities.Admin_Dashboard
@@ -33,6 +34,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
     lateinit var sharedPref: SharedPreferences
     lateinit var editor : SharedPreferences.Editor
+    lateinit var register_view: TextView
+    lateinit var forgot_view: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +54,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         passwordView = findViewById(R.id.passwordView)
         img_back_arrow = findViewById<ImageView>(R.id.img_back_arrow)
         login_btn = findViewById(R.id.login_btn)
+        register_view = findViewById(R.id.register_view)
+        forgot_view = findViewById(R.id.forgot_view)
+        register_view.setOnClickListener(this)
+        forgot_view.setOnClickListener(this)
         img_back_arrow.setOnClickListener(this)
         login_btn.setOnClickListener(this)
         this.hideKeyboard(emailView)
@@ -68,7 +75,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         builder.setPositiveButton("Ok"){dialogInterface, which ->
             dialogInterface.dismiss()
             intent = Intent(this, UserDashboard::class.java)
-            startActivityForResult(intent, 101)
+            startActivityForResult(intent, 51)
+            overridePendingTransition(
+                R.anim.slide_up,
+                R.anim.no_animation
+                        );
                     }
 
         val alertDialog: AlertDialog = builder.create()
@@ -95,8 +106,28 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         when(v?.id) {
             R.id.img_back_arrow -> onBackPressed()
             R.id.login_btn -> validate_login(v)
+            R.id.register_view -> move_register_activity()
+            R.id.forgot_view -> move_forgot_activity()
                 }
             }
+
+    private fun move_forgot_activity() {
+        intent = Intent(applicationContext, ForgotActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(
+            R.anim.slide_up,
+            R.anim.no_animation
+        );
+    }
+
+    private fun move_register_activity() {
+        intent = Intent(applicationContext, RegisterActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(
+            R.anim.slide_up,
+            R.anim.no_animation
+        );
+    }
 
     private fun validate_login(v: View) {
         this.hideKeyboard(emailView)
@@ -137,11 +168,12 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
             editor.putString("user_email", emailstr)
             editor.putString("user_pass", passstr)
+            editor.putString("login_status", "0")
             editor.apply()
             editor.commit()
 
             intent = Intent(this, Admin_Dashboard::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, 51)
             overridePendingTransition(
                 R.anim.slide_up,
                 R.anim.no_animation
@@ -157,6 +189,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 editor.putString("user_pass", profile_datas.get(0).password)
                 editor.putString("user_name", profile_datas.get(0).name)
                 editor.putString("user_mobile", profile_datas.get(0).mobile)
+                editor.putString("login_status", "0")
                 editor.apply()
                 editor.commit()
 
@@ -175,5 +208,15 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         Snackbar.make(view, result, Snackbar.LENGTH_SHORT).show()
                 }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == 51) {
+          if(resultCode == 52) {
+              finish()
+          } else {
+
+          }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 
 }

@@ -197,14 +197,14 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
     private fun init_view() {
         food_back.setOnClickListener(this)
         food_like.setOnClickListener(this)
-        addcart_layout.setOnClickListener(this)
+        viewname.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.food_back -> onBackPressed()
             R.id.food_like -> update_like(v)
-            R.id.addcart_layout -> addtoCart(v)
+            R.id.viewname -> addtoCart(v)
         }
     }
 

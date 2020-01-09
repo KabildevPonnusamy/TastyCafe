@@ -81,7 +81,7 @@
             android:textColor="#000"
             android:background="@drawable/border"
             android:padding="8dp"
-            android:inputType="text"
+            android:inputType="textCapSentences"
             android:singleLine="true"
             android:maxLines="1"
             android:layout_marginTop="25dp"
@@ -114,36 +114,6 @@
             android:layout_marginTop="60dp"
             android:background="@drawable/btnborder"
             android:textAllCaps="false"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/login_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/login"
-                android:textSize="16sp"
-                android:layout_marginLeft="5dp"
-                android:layout_alignParentLeft="true"
-                android:textColor="@color/black"
-                android:fontFamily="@font/firefans_regular"/>
-
-            <TextView
-                android:id="@+id/forgot_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/forgot"
-                android:textSize="16sp"
-                android:layout_marginRight="5dp"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/black"
-                android:fontFamily="@font/firefans_regular"/>
-
-        </RelativeLayout>
 
         <ImageView
             android:layout_width="100dp"

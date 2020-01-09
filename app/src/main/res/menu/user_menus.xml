@@ -20,6 +20,7 @@
     <item
         android:id="@+id/menu_history"
         android:title="History"
-        android:icon="@drawable/menu_hisotry"/>
+        android:iconTint="@color/shadowColor"
+        android:icon="@drawable/ic_orders"/>
 
 </menu>

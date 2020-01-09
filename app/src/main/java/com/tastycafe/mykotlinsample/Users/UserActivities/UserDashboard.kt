@@ -70,5 +70,12 @@ class UserDashboard : AppCompatActivity() {
             true
                 }
             }
+
+    override fun onBackPressed() {
+//        super.onBackPressed()
+        setResult(52)
+        finish()
+        overridePendingTransition( R.anim.no_animation, R.anim.slide_down);
+    }
 }
 
