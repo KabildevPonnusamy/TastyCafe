@@ -6,6 +6,7 @@
 
     <color name="shadowColor">#8888</color>
     <color name="white">#FFF</color>
+    <color name="light_white">#e3e5e7</color>
     <color name="bgnd_color">#E9EAEC</color>
     <color name="btn_color">#245EE5</color>
     <color name="black">#000000</color>

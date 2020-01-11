@@ -23,8 +23,8 @@ class SplashActivity : AppCompatActivity() {
 
         var sharedPref: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         var editor: SharedPreferences.Editor = sharedPref.edit()
-
         var email_str = sharedPref.getString("user_email", "")
+
         Handler().postDelayed({
             if(!email_str.equals("")) {
                 if(email_str.equals("admin@admin.com") ) {

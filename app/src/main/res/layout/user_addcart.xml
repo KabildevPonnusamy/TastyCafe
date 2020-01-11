@@ -59,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
+            android:background="@color/white"
             android:layout_above="@+id/bottom_view"
             android:layout_alignParentTop="true"/>
 
@@ -88,17 +89,18 @@
 
             <Button
                 android:id="@+id/pay_btn"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_width="140dp"
+                android:layout_height="40dp"
                 android:text="Pay $50"
                 android:padding="1dp"
                 android:textStyle="bold"
                 android:singleLine="true"
                 android:textAllCaps="false"
-                android:layout_gravity="center"
+                android:layout_gravity="center|right"
                 android:background="@drawable/btnborder"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
                 android:fontFamily="@font/firefans_regular"
                 android:textColor="@color/white"
                 android:textSize="17sp"/>
@@ -106,10 +108,6 @@
         </LinearLayout>
 
         </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="5dp"/>
 
     </RelativeLayout>
 
