@@ -64,7 +64,34 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         private val CART_ITEM_COUNT = "cart_item_count"
         private val CART_USER_ID = "cart_user_id"
 
+        // Orders Table
+        private val ORDERS_TABLE = "Orders"
+        private val ORDER_ID = "order_id"
+        private val ORDER_USER_ID = "order_user_id"
+        private val ORDER_NAME = "order_name"
+        private val ORDER_ITEMS_COUNT = "order_items_count"
+        private val ORDER_AMOUNT = "order_amount"
+        private val ORDER_DATE = "order_date"
+
+        // Ordered Items Table
+        private val ORDER_ITEMS_TABLE = "OrderItems"
+        private val ORDER_ITEM_ID = "order_item_id"
+        private val PARENT_ORDER_ID = "parent_order_id"
+        private val ORDER_CATE_ID = "order_cate_id"
+        private val ITEM_ORDER_ID = "item_order_id"
+        private val ITEM_ORDER_NAME = "item_order_name"
+        private val ITEM_ORDER_PRICE = "item_order_price"
+        private val ITEM_ORDER_IMAGE = "item_order_image"
+
     }
+
+    val CREATE_ORDERS_TABLE = ("CREATE TABLE $ORDERS_TABLE ($ORDER_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "$ORDER_USER_ID TEXT, $ORDER_NAME TEXT, $ORDER_ITEMS_COUNT TEXT, $ORDER_AMOUNT TEXT, " +
+            "$ORDER_DATE TEXT) ")
+
+    val CREATE_ORDER_ITEMS_TABLE = ("CREATE TABLE $ORDER_ITEMS_TABLE($ORDER_ITEM_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "$PARENT_ORDER_ID TEXT, $ORDER_CATE_ID TEXt, $ITEM_ORDER_ID TEXT, $ITEM_ORDER_NAME TEXT," +
+            "$ITEM_ORDER_PRICE TEXT, $ITEM_ORDER_IMAGE TEXT) ")
 
     val CREATE_PROFILE_TABLE = ("CREATE TABLE $PROFILE_TABLE ($COL_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "$COL_EMAIL TEXT, $COL_PASS TEXT, $COL_NAME TEXT, $COL_MOBILE TEXT)")
@@ -90,6 +117,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         db!!.execSQL(CREATE_ITEM_TABLE)
         db!!.execSQL(CREATE_LIKE_TABLE)
         db!!.execSQL(CREATE_CART_TABLE)
+        db!!.execSQL(CREATE_ORDERS_TABLE)
+        db!!.execSQL(CREATE_ORDER_ITEMS_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -98,7 +127,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
         db!!.execSQL("DROP TABLE IF EXISTS $ITEM_TABLE")
         db!!.execSQL("DROP TABLE IF EXISTS $LIKE_TABLE")
         db!!.execSQL("DROP TABLE IF EXISTS $CART_TABLE")
+        db!!.execSQL("DROP TABLE IF EXISTS $CREATE_ORDERS_TABLE")
+        db!!.execSQL("DROP TABLE IF EXISTS $CREATE_ORDER_ITEMS_TABLE")
     }
+
+
 
     // Add cart Table
     fun addTocart(cart_cate_id: String, cart_item_id: String, cart_item_name: String,
@@ -168,6 +201,13 @@ class DBHelper(context: Context) : SQLiteOpenHelper (context,
     fun deleteCartItems (cart_user_id: String, cart_id: String) {
         val db = writableDatabase
         db.delete(CART_TABLE, "$CART_ID=? and $CART_USER_ID=?", arrayOf(cart_id, cart_user_id))
+        db.close()
+    }
+
+    //Delete Cart Items
+    fun deleteAllCartItems (cart_user_id: String) {
+        val db = writableDatabase
+        db.delete(CART_TABLE, "$CART_USER_ID=?", arrayOf(cart_user_id))
         db.close()
     }
 
