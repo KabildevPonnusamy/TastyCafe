@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet_layout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgnd_color"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <ImageView
+        android:id="@+id/close_sheet"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="right"
+        android:src="@drawable/ic_closebtn"
+        android:tint="@color/black"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/firefans_regular"
+        android:text="Please enter your order name"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:layout_marginLeft="20dp"/>
+
+    <EditText
+        android:id="@+id/ordername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:background="@drawable/border"
+        android:padding="8dp"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:maxLength="40"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:textColorHint="@color/shadowColor"
+        android:inputType="textCapSentences|text"
+        android:layout_marginTop="20dp"
+        android:hint="Ex: Mr frd Sandy Birthday"/>
+
+    <Button
+        android:id="@+id/order_btn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Order Now"
+        android:background="@drawable/btnborder"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30sp"/>
+
+</LinearLayout>

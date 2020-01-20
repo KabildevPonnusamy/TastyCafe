@@ -13,6 +13,7 @@ import com.tastycafe.mykotlinsample.Admin.AdminModels.LikesList
 import com.tastycafe.mykotlinsample.Database.DBHelper
 
 import com.tastycafe.mykotlinsample.R
+import com.tastycafe.mykotlinsample.Users.UserModels.OrdersList
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 /**
@@ -29,6 +30,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     internal lateinit var db: DBHelper
 
     var likedDatas: ArrayList<LikesList> = ArrayList<LikesList>()
+    var ordersList: ArrayList<OrdersList> = ArrayList<OrdersList>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +56,11 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     }
 
     private fun get_Orders() {
+        ordersList.clear()
+        ordersList = db.getOrdersList(strEmail)
+        db.close()
 
+        orders_count.setText("" + ordersList.size)
     }
 
     private fun get_Likes() {
