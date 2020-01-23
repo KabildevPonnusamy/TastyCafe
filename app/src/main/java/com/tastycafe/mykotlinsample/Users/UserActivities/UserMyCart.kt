@@ -82,6 +82,7 @@ class UserMyCart : AppCompatActivity(), View.OnClickListener {
 
     private fun getIntents() {
         mycartList = intent.getParcelableArrayListExtra("myCartList")
+
         if (mycartList != null) {
             if (mycartList.size > 0) {
                 mycart_recycle.layoutManager = LinearLayoutManager(

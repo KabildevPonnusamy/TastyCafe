@@ -69,6 +69,8 @@ class MyCartAdapter(var context: Context, val cartList: ArrayList<AddCartList>,
             holder.db.deleteCartItems("" + user_email, "" + cItems.cart_id)
             holder.db.close()
             cartList.removeAt(position)
+
+            (context as UserMyCart).showTotal(cartList)
             notifyDataSetChanged()
         }
 
