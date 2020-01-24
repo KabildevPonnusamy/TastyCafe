@@ -47,6 +47,10 @@ class UserCoolItems : AppCompatActivity(), View.OnClickListener {
                         var itemofrprice: String? = coolItems[position].item_ofr_price
                         var itemlikecount:String? = coolItems[position].item_like_count
 
+                        if(!itemofrprice.equals("00.00")) {
+                            itemprice = itemofrprice
+                        }
+
                         intent = Intent(applicationContext, UserItemDetails::class.java)
                         intent.putExtra("itemid", "" + itemid)
                         intent.putExtra("itemname", itemname)

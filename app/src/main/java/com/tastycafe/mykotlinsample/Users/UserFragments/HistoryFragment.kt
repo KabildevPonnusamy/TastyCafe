@@ -6,28 +6,20 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tastycafe.mykotlinsample.Admin.AdminSupportClasses.RecyclerItemClickListenr
 import com.tastycafe.mykotlinsample.Database.DBHelper
-
 import com.tastycafe.mykotlinsample.R
-import com.tastycafe.mykotlinsample.Users.UserActivities.UserItemDetails
 import com.tastycafe.mykotlinsample.Users.UserActivities.UserOrderItems
-import com.tastycafe.mykotlinsample.Users.UserAdapters.HotItemsAdapter
-import com.tastycafe.mykotlinsample.Users.UserAdapters.MyCartAdapter
 import com.tastycafe.mykotlinsample.Users.UserAdapters.OrdersAdapter
-import com.tastycafe.mykotlinsample.Users.UserModels.AddCartList
 import com.tastycafe.mykotlinsample.Users.UserModels.OrderItemList
 import com.tastycafe.mykotlinsample.Users.UserModels.OrdersList
 import kotlinx.android.synthetic.main.fragment_history.*
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.user_addcart.*
-import kotlinx.android.synthetic.main.user_hotitems.*
 
 /**
  * A simple [Fragment] subclass.

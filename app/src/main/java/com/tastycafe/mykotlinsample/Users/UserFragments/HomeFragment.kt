@@ -106,6 +106,10 @@ class HomeFragment : Fragment(), View.OnClickListener {
                         var itemofrprice: String? = itemList[position].item_ofr_price
                         var itemlikecount:String? = itemList[position].item_like_count
 
+                        if(!itemofrprice.equals("00.00")) {
+                            itemprice = itemofrprice
+                        }
+
                         intent = Intent(requireContext(), UserItemDetails::class.java)
                         intent.putExtra("itemid", "" + itemid)
                         intent.putExtra("itemname", itemname)
@@ -139,6 +143,10 @@ class HomeFragment : Fragment(), View.OnClickListener {
                         var itemprice: String? = offeredItemList[position].item_price
                         var itemofrprice: String? = offeredItemList[position].item_ofr_price
                         var itemlikecount:String? = offeredItemList[position].item_like_count
+
+                        if(!itemofrprice.equals("00.00")) {
+                            itemprice = itemofrprice
+                        }
 
                         intent = Intent(requireContext(), UserItemDetails::class.java)
                         intent.putExtra("itemid", "" + itemid)

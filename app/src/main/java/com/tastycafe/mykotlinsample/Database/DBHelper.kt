@@ -159,7 +159,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(
     }
 
     fun addToOrderItems(parent_orderid: String, user_id: String, order_cateid: String, item_orderid: String,
-        item_name: String, item_price: String, item_img: String, item_count: String) {
+        item_name: String, item_price: String, item_count: String, item_img: String) {
         val db = this.writableDatabase
         val values = ContentValues()
         values.put(PARENT_ORDER_ID, parent_orderid)

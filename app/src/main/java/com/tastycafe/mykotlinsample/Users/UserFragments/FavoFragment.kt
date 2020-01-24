@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,6 @@ import com.tastycafe.mykotlinsample.R
 import com.tastycafe.mykotlinsample.Users.UserActivities.UserItemDetails
 import com.tastycafe.mykotlinsample.Users.UserAdapters.LikesAdapter
 import kotlinx.android.synthetic.main.fragment_favo.*
-import kotlinx.android.synthetic.main.fragment_home.*
 
 class FavoFragment : Fragment() {
 
@@ -130,6 +128,10 @@ class FavoFragment : Fragment() {
                         var itemprice: String? = myLikeditems[position].item_price
                         var itemofrprice: String? = myLikeditems[position].item_ofr_price
                         var itemlikecount:String? = myLikeditems[position].item_like_count
+
+                        if(!itemofrprice.equals("00.00")) {
+                            itemprice = itemofrprice
+                        }
 
                         intent = Intent(requireContext(), UserItemDetails::class.java)
                         intent.putExtra("itemid", "" + itemid)

@@ -3,6 +3,7 @@ package com.tastycafe.mykotlinsample.Users.UserAdapters
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +59,7 @@ class LikesAdapter(var context: Context, val myLikeditems: ArrayList<ItemDatasLi
 
         val bitmap: Bitmap = BitmapFactory.decodeFile(cItems.item_img)
         holder.item_img!!.setImageBitmap(bitmap)
+        Log.e("appSample" , "Value: " + cItems.cate_id);
         holder.item_category.setText(cItems.cate_id)
         holder.ic_close.setOnClickListener( {itemClick(position)} )
     }

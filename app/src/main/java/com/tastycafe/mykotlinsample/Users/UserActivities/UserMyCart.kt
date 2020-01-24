@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.tastycafe.mykotlinsample.Admin.AdminModels.CategoryList
 import com.tastycafe.mykotlinsample.Database.DBHelper
 import com.tastycafe.mykotlinsample.R
 import com.tastycafe.mykotlinsample.Users.UserAdapters.MyCartAdapter
@@ -35,6 +36,7 @@ class UserMyCart : AppCompatActivity(), View.OnClickListener {
     var finalamt: String = ""
     internal lateinit var db: DBHelper
     var ordersList: ArrayList<OrdersList> = ArrayList<OrdersList>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

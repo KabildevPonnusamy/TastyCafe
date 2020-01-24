@@ -72,6 +72,7 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
         str_fprice = intent.getStringExtra("itemprice")
         str_offprice = intent.getStringExtra("itemofrprice")
         shownstatus = intent.getStringExtra("shownstatus")
+        Log.e("appSample", "Cart: " + str_fcate_id)
 
         if(shownstatus != null && shownstatus != "") {
             food_like.visibility = View.GONE
@@ -150,6 +151,10 @@ class UserItemDetails : AppCompatActivity(), View.OnClickListener {
                         str_fcate_id = similarItems[position].cate_id.toString()
                         str_fprice = similarItems[position].item_price.toString()
                         str_offprice = similarItems[position].item_ofr_price.toString()
+
+                        if(!str_offprice.equals("00.00")) {
+                            str_fprice = str_offprice
+                        }
 //                        str_ftotallikes = similarItems[position].item_like_count.toString()
 
                         show_views()
