@@ -152,7 +152,7 @@ class UserMyCart : AppCompatActivity(), View.OnClickListener {
                 "" + mycartList.get(i).cart_item_count, "" + mycartList.get(i).cart_item_image)
 
             Log.e("appSample", "Name: " + mycartList.get(i).cart_item_name)
-            Log.e("appSample", "Count: " + mycartList.get(i).cart_item_count)
+            Log.e("appSample", "Image: " + mycartList.get(i).cart_item_image)
         }
 
         db.deleteAllCartItems(user_email)

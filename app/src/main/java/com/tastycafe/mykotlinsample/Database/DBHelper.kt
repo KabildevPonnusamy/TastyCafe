@@ -177,7 +177,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(
     fun getOrderItemsList(user_id: String, parent_order_id: String): ArrayList<OrderItemList> {
         val ordersItmList = ArrayList<OrderItemList>()
         val selectQuery =
-            "SELECT * FROM $ORDER_ITEMS_TABLE Where $ORDER_USER_ID = '$user_id' and " +
+            "SELECT * FROM $ORDER_ITEMS_TABLE Where $ORDER_ITEM_USERID = '$user_id' and " +
                     "$PARENT_ORDER_ID = '$parent_order_id'"
         val db = this.writableDatabase
         val cursor = db.rawQuery(selectQuery, null)
